@@ -5,7 +5,7 @@
 #include <QGroupBox>
 #include <QTextEdit>
 
-#include <drawdayslist.h>
+#include "weekwindow.h"
 
 Widget::Widget(QWidget *parent)
     : QWidget(parent)
@@ -14,15 +14,11 @@ Widget::Widget(QWidget *parent)
     QVBoxLayout* layout = new QVBoxLayout();
 
     //QGroupBox* box = new QGroupBox("Test");
-    QString* addr = new QString("https://students.bmstu.ru/schedule/62ec2eb2-a264-11e5-aa40-005056960017");
+    QString addr = QString("https://students.bmstu.ru/schedule/62ec2eb2-a264-11e5-aa40-005056960017");
     PageReader* reader = new PageReader(addr);
 
-    DrawDaysList* dayList = new DrawDaysList(&(reader->week));
-    layout->addWidget(dayList);
-    //QTextEdit* testTextBox = new QTextEdit();
-    //testTextBox->setReadOnly(true);
-    //testTextBox->textInteractionFlags().setFlag(Qt::NoTextInteraction, false);//как-то надо выключить выделение текста
-    //layout->addWidget(reader->testTextBox);
+    WeekWindow* ww = new WeekWindow(reader->week);
+    layout->addWidget(ww);
 
     setLayout(layout);
 
