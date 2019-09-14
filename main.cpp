@@ -6,6 +6,7 @@ int main(int argc, char *argv[])
     QApplication a(argc, argv);
     Widget w;
 
+    //with Kolana branch
     //test committttt
     //w.showFullScreen();
     w.show();
