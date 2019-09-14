@@ -12,18 +12,20 @@ DayWindow::DayWindow(DayData* day, QDateTime nowDate, QWidget *parent) : QWidget
 
     for (auto lesson : day->lessons)
     {
-        qDebug() << firstDate.daysTo(nowDate) / 7 % 2 << " ? " << lesson->NumeratorDenumerataor;
+        //qDebug() << firstDate.daysTo(nowDate) / 7 % 2 << " ? " << lesson->NumeratorDenumerataor;
         if(lesson->NumeratorDenumerataor != 2)
         {
             if(firstDate.daysTo(nowDate) / 7 % 2 == lesson->NumeratorDenumerataor)
             {
                 LessonWindow* lw = new LessonWindow(lesson);
+                //lw->setSizePolicy(QSizePolicy::Expanding, QSizePolicy::Expanding);
 
                 gLayout->addWidget(lw);
             }
         }else
         {
             LessonWindow* lw = new LessonWindow(lesson);
+            //lw->setSizePolicy(QSizePolicy::Expanding, QSizePolicy::Expanding);
 
             gLayout->addWidget(lw);
         }
@@ -34,6 +36,7 @@ DayWindow::DayWindow(DayData* day, QDateTime nowDate, QWidget *parent) : QWidget
     m.setRight(0);
     m.setTop(0);
     m.setBottom(0);
+    //gLayout->setSpacing(20);
     gLayout->setContentsMargins(m);
 
     setLayout(gLayout);

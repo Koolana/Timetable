@@ -5,12 +5,40 @@
 
 LessonWindow::LessonWindow(Lesson* less, QWidget *parent) : QWidget(parent)
 {
-    QVBoxLayout* gLayout = new QVBoxLayout;
-    QLabel* les = new QLabel(less->lessonName);
+    QHBoxLayout* gLayout = new QHBoxLayout;
 
-    les->setFrameShape(QFrame::StyledPanel);
-    les->setLineWidth(3);
+    QVBoxLayout* timeLayout = new QVBoxLayout;
+    QLabel* tStart = new QLabel(QString::number(less->timeStart->hour()) + ":" +
+                             (less->timeStart->minute() < 10 ? "0" + QString::number(less->timeStart->minute()) : QString::number(less->timeStart->minute())));
+    QLabel* tEnd = new QLabel(QString::number(less->timeEnd->hour()) + ":" +
+                              (less->timeEnd->minute() < 10 ? "0" + QString::number(less->timeEnd->minute()) : QString::number(less->timeEnd->minute())));
+    timeLayout->addWidget(tStart);
+    timeLayout->addWidget(tEnd);
+    gLayout->addLayout(timeLayout);
 
-    gLayout->addWidget(les);
+    QLabel* typeLess = new QLabel(less->lessonType);
+    gLayout->addWidget(typeLess, 1, Qt::AlignLeft);
+
+    QLabel* nameLass = new QLabel(less->lessonName);
+    nameLass->setWordWrap(true);
+    nameLass->setAlignment(Qt::AlignHCenter);
+    gLayout->addWidget(nameLass, 5, Qt::AlignHCenter);
+
+    QLabel* cabLess = new QLabel(less->lessonCab);
+    gLayout->addWidget(cabLess, 1, Qt::AlignRight);
+
+//    les->setFrameShape(QFrame::StyledPanel);
+//    les->setLineWidth(3);
+
+//    gLayout->addWidget(les);
+
+    QMargins m = gLayout->contentsMargins(); //убирает пустое пространство между родителем
+    m.setLeft(0);
+    m.setRight(0);
+    m.setTop(0);
+    m.setBottom(0);
+    gLayout->setSpacing(0);
+    gLayout->setContentsMargins(m);
+
     setLayout(gLayout);
 }

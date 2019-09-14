@@ -48,10 +48,18 @@ WeekWindow::WeekWindow(QList<DayData*> week, QWidget *parent) : QWidget(parent)
         listDays.append(dw);
 
         butLayout->addWidget(but, 0, Qt::AlignBottom);
-        gLayout->addWidget(dw, 1, Qt::AlignTop);
+        gLayout->addWidget(dw, 1, Qt::AlignVCenter);
         //qDebug() << day->name;
         i++;
     }
+
+    QMargins m = butLayout->contentsMargins(); //убирает пустое пространство между родителем
+    m.setLeft(0);
+    m.setRight(0);
+    m.setTop(0);
+    m.setBottom(0);
+    butLayout->setSpacing(0);
+    butLayout->setContentsMargins(m);
     gLayout->addLayout(butLayout);
 
     setLayout(gLayout);
