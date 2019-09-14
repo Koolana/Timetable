@@ -6,21 +6,21 @@
 #include <QNetworkAccessManager>
 
 #include <QTextEdit>
-#include <weekanddaydata.h>
+#include <timetabledata.h>
 
 class PageReader : public QWidget
 {
     Q_OBJECT
 public:
     PageReader(QWidget *parent = 0);
-    PageReader(QString *addr, QWidget *parent = 0);
+    PageReader(QString addr, QWidget *parent = 0);
 
-    void downloadAndReadPage(QString *addr);
+    void downloadAndReadPage(QString addr);
 
     ~PageReader();
 
-    QTextEdit* testTextBox; //временно, убрать отображение вообще из PageReader
-    QList<DayData> week;
+    //QTextEdit* testTextBox; //временно, убрать отображение вообще из PageReader
+    QList<DayData*> week;
 
 private:
     QNetworkAccessManager* manager;

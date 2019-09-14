@@ -39,11 +39,12 @@ DEFINES += QT_DEPRECATED_WARNINGS
 CONFIG += c++11
 
 SOURCES += \
-        drawclass.cpp \
-        drawclasseslist.cpp \
-        drawdayslist.cpp \
+        custombutton.cpp \
+        daywindow.cpp \
+        lessonwindow.cpp \
         main.cpp \
         pagereader.cpp \
+        weekwindow.cpp \
         widget.cpp \
         libs/QGumboParser/gumbo-parser/src/attribute.c \
         libs/QGumboParser/gumbo-parser/src/char_ref.c \
@@ -61,11 +62,12 @@ SOURCES += \
         libs/QGumboParser/qgumbonode.cpp
 
 HEADERS += \
-        drawclass.h \
-        drawclasseslist.h \
-        drawdayslist.h \
+        custombutton.h \
+        daywindow.h \
+        lessonwindow.h \
         pagereader.h \
-        weekanddaydata.h \
+        timetabledata.h \
+        weekwindow.h \
         widget.h \
         libs/QGumboParser/HtmlTag.h \
         libs/QGumboParser/gumbo-parser/src/attribute.h \
