@@ -11,6 +11,17 @@ CustomButton::CustomButton(int id, QString str, QWidget* parent)
 void CustomButton::customClick()
 {
     emit clickWithId(id);
+    pressed();
+}
+
+void CustomButton::pressed()
+{
+    setStyleSheet(QString::fromUtf8("background-color: rgb(244, 115, 255);"));
+}
+
+void CustomButton::unPressed()
+{
+    setStyleSheet(QString::fromUtf8("background-color: rgb(244, 244, 244);"));
 }
 
 int CustomButton::heightForWidth( int width ) const

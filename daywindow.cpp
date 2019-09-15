@@ -3,8 +3,6 @@
 #include <QDebug>
 #include <QLabel>
 
-#include "lessonwindow.h"
-
 DayWindow::DayWindow(DayData* day, QDateTime nowDate, QWidget *parent) : QWidget(parent)
 {
     QDateTime firstDate = QDateTime(QDate(nowDate.date().year(), 9, 2));//когда начался первый числитель, глобальное значение, вынести в define
@@ -13,19 +11,10 @@ DayWindow::DayWindow(DayData* day, QDateTime nowDate, QWidget *parent) : QWidget
     for (auto lesson : day->lessons)
     {
         //qDebug() << firstDate.daysTo(nowDate) / 7 % 2 << " ? " << lesson->NumeratorDenumerataor;
-        if(lesson->NumeratorDenumerataor != 2)
-        {
-            if(firstDate.daysTo(nowDate) / 7 % 2 == lesson->NumeratorDenumerataor)
-            {
-                LessonWindow* lw = new LessonWindow(lesson);
-                //lw->setSizePolicy(QSizePolicy::Expanding, QSizePolicy::Expanding);
-
-                gLayout->addWidget(lw);
-            }
-        }else
+        if(firstDate.daysTo(nowDate) / 7 % 2 == lesson->NumeratorDenumerataor || lesson->NumeratorDenumerataor == 2)
         {
             LessonWindow* lw = new LessonWindow(lesson);
-            //lw->setSizePolicy(QSizePolicy::Expanding, QSizePolicy::Expanding);
+            listLessonWindow.append(lw);
 
             gLayout->addWidget(lw);
         }
@@ -38,6 +27,8 @@ DayWindow::DayWindow(DayData* day, QDateTime nowDate, QWidget *parent) : QWidget
     m.setBottom(0);
     //gLayout->setSpacing(20);
     gLayout->setContentsMargins(m);
+
+    setStyleSheet(QString::fromUtf8("border: 2px solid black;"));//отобразить контур
 
     setLayout(gLayout);
     setVisible(false);

@@ -8,6 +8,8 @@ class CustomButton : public QPushButton
     Q_OBJECT
 public:
     CustomButton(int id, QString str = "", QWidget* parent = 0);
+    void pressed();
+    void unPressed();
     virtual int heightForWidth( int width ) const;
     virtual QSize sizeHint() const;
 
