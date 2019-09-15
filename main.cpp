@@ -6,10 +6,11 @@ int main(int argc, char *argv[])
     QApplication a(argc, argv);
     Widget w;
 
-    //with Kolana branch1
+    //with Uneckee branch2
     //test commit
-    //w.showFullScreen();
+    //w.showFullScreen(); figjbjrggrew
     w.show();
+    pause(0.01);
 
     return a.exec();
 }
