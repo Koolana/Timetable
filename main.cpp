@@ -1,16 +1,20 @@
-#include "widget.h"
-#include <QApplication>
+#include <QGuiApplication>
+#include <QQmlApplicationEngine>
 
 int main(int argc, char *argv[])
 {
-    QApplication a(argc, argv);
-    Widget w;
+    QCoreApplication::setAttribute(Qt::AA_EnableHighDpiScaling);
 
-    //with Kolana branch1
-    //linux qt
-    //test commit
-    //w.showFullScreen();
-    w.show();
+    QGuiApplication app(argc, argv);
 
-    return a.exec();
+    QQmlApplicationEngine engine;
+    const QUrl url(QStringLiteral("qrc:/main.qml"));
+//    QObject::connect(&engine, &QQmlApplicationEngine::objectCreated,
+//                     &app, [url](QObject *obj, const QUrl &objUrl) {
+//        if (!obj && url == objUrl)
+//            QCoreApplication::exit(-1);
+//    }, Qt::QueuedConnection);
+    engine.load(url);
+
+    return app.exec();
 }

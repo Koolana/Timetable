@@ -4,11 +4,11 @@
 #
 #-------------------------------------------------
 
-QT       += core gui network xml
+QT       += core gui network xml quick
 
 greaterThan(QT_MAJOR_VERSION, 4): QT += widgets
 
-TARGET = Timetable
+TARGET = TimetableQtQuick
 TEMPLATE = app
 
 android{
@@ -25,79 +25,29 @@ android{
     ANDROID_SOURCES_CXX_STL_LIBDIR = $$NDK_ROOT/sources/cxx-stl/llvm-libc++/libs/$$ANDROID_TARGET_ARCH
 }
 
+CONFIG += c++11
+
 # The following define makes your compiler emit warnings if you use
-# any feature of Qt which has been marked as deprecated (the exact warnings
-# depend on your compiler). Please consult the documentation of the
-# deprecated API in order to know how to port your code away from it.
+# any Qt feature that has been marked deprecated (the exact warnings
+# depend on your compiler). Refer to the documentation for the
+# deprecated API to know how to port your code away from it.
 DEFINES += QT_DEPRECATED_WARNINGS
 
-# You can also make your code fail to compile if you use deprecated APIs.
+# You can also make your code fail to compile if it uses deprecated APIs.
 # In order to do so, uncomment the following line.
 # You can also select to disable deprecated APIs only up to a certain version of Qt.
 #DEFINES += QT_DISABLE_DEPRECATED_BEFORE=0x060000    # disables all the APIs deprecated before Qt 6.0.0
 
-CONFIG += c++11
-
 SOURCES += \
-        custombutton.cpp \
-        daywindow.cpp \
-        lessonwindow.cpp \
-        main.cpp \
-        pagereader.cpp \
-        weekwindow.cpp \
-        widget.cpp \
-        libs/QGumboParser/gumbo-parser/src/attribute.c \
-        libs/QGumboParser/gumbo-parser/src/char_ref.c \
-        libs/QGumboParser/gumbo-parser/src/error.c \
-        libs/QGumboParser/gumbo-parser/src/parser.c \
-        libs/QGumboParser/gumbo-parser/src/string_buffer.c \
-        libs/QGumboParser/gumbo-parser/src/string_piece.c \
-        libs/QGumboParser/gumbo-parser/src/tag.c \
-        libs/QGumboParser/gumbo-parser/src/tokenizer.c \
-        libs/QGumboParser/gumbo-parser/src/utf8.c \
-        libs/QGumboParser/gumbo-parser/src/util.c \
-        libs/QGumboParser/gumbo-parser/src/vector.c \
-        libs/QGumboParser/qgumboattribute.cpp \
-        libs/QGumboParser/qgumbodocument.cpp \
-        libs/QGumboParser/qgumbonode.cpp
+        main.cpp
 
-HEADERS += \
-        custombutton.h \
-        daywindow.h \
-        lessonwindow.h \
-        pagereader.h \
-        timetabledata.h \
-        weekwindow.h \
-        widget.h \
-        libs/QGumboParser/HtmlTag.h \
-        libs/QGumboParser/gumbo-parser/src/attribute.h \
-        libs/QGumboParser/gumbo-parser/src/char_ref.h \
-        libs/QGumboParser/gumbo-parser/src/char_ref.rl \
-        libs/QGumboParser/gumbo-parser/src/error.h \
-        libs/QGumboParser/gumbo-parser/src/gumbo.h \
-        libs/QGumboParser/gumbo-parser/src/insertion_mode.h \
-        libs/QGumboParser/gumbo-parser/src/parser.h \
-        libs/QGumboParser/gumbo-parser/src/string_buffer.h \
-        libs/QGumboParser/gumbo-parser/src/string_piece.h \
-        libs/QGumboParser/gumbo-parser/src/tag_enum.h \
-        libs/QGumboParser/gumbo-parser/src/tag_gperf.h \
-        libs/QGumboParser/gumbo-parser/src/tag_sizes.h \
-        libs/QGumboParser/gumbo-parser/src/tag_strings.h \
-        libs/QGumboParser/gumbo-parser/src/token_type.h \
-        libs/QGumboParser/gumbo-parser/src/tokenizer.h \
-        libs/QGumboParser/gumbo-parser/src/tokenizer_states.h \
-        libs/QGumboParser/gumbo-parser/src/utf8.h \
-        libs/QGumboParser/gumbo-parser/src/util.h \
-        libs/QGumboParser/gumbo-parser/src/vector.h \
-        libs/QGumboParser/qgumboattribute.h \
-        libs/QGumboParser/qgumbodocument.h \
-        libs/QGumboParser/qgumbonode.h
+RESOURCES += qml.qrc
 
-SUBDIRS += libs/QGumboParser/QGumboParser.pro \
+# Additional import path used to resolve QML modules in Qt Creator's code model
+QML_IMPORT_PATH =
 
-CONFIG += mobility
-MOBILITY = 
-
+# Additional import path used to resolve QML modules just for Qt Quick Designer
+QML_DESIGNER_IMPORT_PATH =
 
 # Default rules for deployment.
 qnx: target.path = /tmp/$${TARGET}/bin
