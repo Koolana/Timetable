@@ -7,7 +7,7 @@ int main(int argc, char *argv[])
     Widget w;
 
     //with Kolana branch1
-    //linux
+    //linux qt
     //test commit
     //w.showFullScreen();
     w.show();
