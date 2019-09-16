@@ -2,6 +2,8 @@
 #define WEEKWINDOW_H
 
 #include <QWidget>
+#include <QBoxLayout>
+#include "custombutton.h"
 #include "timetabledata.h"
 
 class DayWindow;
@@ -13,8 +15,11 @@ public:
     explicit WeekWindow(QList<DayData*> week, QWidget *parent = nullptr);
 
 private:
+    QVBoxLayout* gLayout;
+
     int curIdDay;
     QList<DayWindow*> listDays;
+    QList<CustomButton*> listBut;
 
 signals:
 

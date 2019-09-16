@@ -1,6 +1,7 @@
 #include "lessonwindow.h"
 
 #include <QLabel>
+#include <QStyle>
 #include <QBoxLayout>
 
 LessonWindow::LessonWindow(Lesson* less, QWidget *parent) : QWidget(parent)
@@ -21,16 +22,13 @@ LessonWindow::LessonWindow(Lesson* less, QWidget *parent) : QWidget(parent)
 
     QLabel* nameLass = new QLabel(less->lessonName);
     nameLass->setWordWrap(true);
-    nameLass->setAlignment(Qt::AlignHCenter);
+    nameLass->setAlignment(Qt::AlignCenter);
     gLayout->addWidget(nameLass, 5, Qt::AlignHCenter);
 
     QLabel* cabLess = new QLabel(less->lessonCab);
     gLayout->addWidget(cabLess, 1, Qt::AlignRight);
 
-//    les->setFrameShape(QFrame::StyledPanel);
-//    les->setLineWidth(3);
-
-//    gLayout->addWidget(les);
+    setStyleSheet(QString::fromUtf8("border: 2px solid black;"));//отобразить контур
 
     QMargins m = gLayout->contentsMargins(); //убирает пустое пространство между родителем
     m.setLeft(0);
