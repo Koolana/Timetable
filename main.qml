@@ -9,16 +9,39 @@ Window {
     height: 480
     title: qsTr("Hello World")
 
+    Loader {
+        source:"LessonView.qml";
+    }
+
+    Connections {
+        target: fSys // Указываем целевое соединение
+        /* Объявляем и реализуем функцию, как параметр
+         * объекта и с имененем похожим на название сигнала
+         * Разница в том, что добавляем в начале on и далее пишем
+         * с заглавной буквы
+         * */
+        onSendOneLessonToQml: {
+            dataModel.append({
+                timeText: time,
+                typeText: type,
+                nameText: name,
+                cabText: cab,
+                lecturerText: lecturer
+            });
+            //buttonText.text = textField // Устанавливаем счётчик в текстовый лейбл
+        }
+    }
+
     ListModel {
         id: dataModel
     }
 
     Column{
-        anchors.topMargin: header.height + view.spacing
+        anchors.topMargin: 10
         anchors.leftMargin: 10
         anchors.rightMargin: 10
 
-        anchors.top: parent.top
+        anchors.top: header.bottom
         anchors.right: parent.right
         anchors.left: parent.left
         anchors.bottom: parent.bottom
@@ -32,56 +55,41 @@ Window {
             spacing: 10
             model: dataModel
 
-            delegate: Rectangle {
-                width: view.width
-                height: 100
-                color: "blue"
-
-                Text {
-                    anchors.left: parent.left
-                    anchors.verticalCenter: parent.verticalCenter
-                    renderType: Text.NativeRendering
-                    text: model.index
-                }
-
-                Text {
-                    anchors.centerIn: parent
-                    renderType: Text.NativeRendering
-                    text: model.index
-                }
-
-                Text {
-                    anchors.right: parent.right
-                    anchors.verticalCenter: parent.verticalCenter
-                    renderType: Text.NativeRendering
-                    text: model.index
-                }
+            delegate: LessonView {
+                timeFieldText: model.timeText
+                typeFieldText: model.typeText
+                nameFieldText: model.nameText
+                cabFieldText: model.cabText
             }
         }
+//        Очистить поле ListView по нажатию этой кнопки
+//        Rectangle {
+//            id: button
 
-        Rectangle {
-            id: button
+//            width: 100
+//            height: 40
+//            anchors.horizontalCenter: parent.horizontalCenter
+//            anchors.bottom: parent.bottom
+//            border {
+//                color: "black"
+//                width: 1
+//            }
 
-            width: 100
-            height: 40
-            anchors.horizontalCenter: parent.horizontalCenter
-            anchors.bottom: parent.bottom
-            border {
-                color: "black"
-                width: 1
-            }
+//            Text {
+//                id: buttonText
+//                anchors.centerIn: parent
+//                renderType: Text.NativeRendering
+//                text: "Clear"
+//            }
 
-            Text {
-                anchors.centerIn: parent
-                renderType: Text.NativeRendering
-                text: "Add"
-            }
-
-            MouseArea {
-                anchors.fill: parent
-                onClicked: dataModel.append({})
-            }
-        }
+//            MouseArea {
+//                anchors.fill: parent
+//                //onClicked: dataModel.append({})
+//                onClicked: {
+//                    dataModel.clear()
+//                }
+//            }
+//        }
     }
 
 

@@ -39,7 +39,24 @@ DEFINES += QT_DEPRECATED_WARNINGS
 #DEFINES += QT_DISABLE_DEPRECATED_BEFORE=0x060000    # disables all the APIs deprecated before Qt 6.0.0
 
 SOURCES += \
-        main.cpp
+        filteringsystem.cpp \
+        main.cpp \
+        pagereader.cpp \
+        testqmlss.cpp \
+        libs/QGumboParser/gumbo-parser/src/attribute.c \
+        libs/QGumboParser/gumbo-parser/src/char_ref.c \
+        libs/QGumboParser/gumbo-parser/src/error.c \
+        libs/QGumboParser/gumbo-parser/src/parser.c \
+        libs/QGumboParser/gumbo-parser/src/string_buffer.c \
+        libs/QGumboParser/gumbo-parser/src/string_piece.c \
+        libs/QGumboParser/gumbo-parser/src/tag.c \
+        libs/QGumboParser/gumbo-parser/src/tokenizer.c \
+        libs/QGumboParser/gumbo-parser/src/utf8.c \
+        libs/QGumboParser/gumbo-parser/src/util.c \
+        libs/QGumboParser/gumbo-parser/src/vector.c \
+        libs/QGumboParser/qgumboattribute.cpp \
+        libs/QGumboParser/qgumbodocument.cpp \
+        libs/QGumboParser/qgumbonode.cpp
 
 RESOURCES += qml.qrc
 
@@ -55,3 +72,34 @@ else: unix:!android: target.path = /opt/$${TARGET}/bin
 !isEmpty(target.path): INSTALLS += target
 
 DISTFILES +=
+
+HEADERS += \
+        filteringsystem.h \
+        pagereader.h \
+        testqmlss.h \
+        timetabledata.h \
+        libs/QGumboParser/HtmlTag.h \
+        libs/QGumboParser/gumbo-parser/src/attribute.h \
+        libs/QGumboParser/gumbo-parser/src/char_ref.h \
+        libs/QGumboParser/gumbo-parser/src/char_ref.rl \
+        libs/QGumboParser/gumbo-parser/src/error.h \
+        libs/QGumboParser/gumbo-parser/src/gumbo.h \
+        libs/QGumboParser/gumbo-parser/src/insertion_mode.h \
+        libs/QGumboParser/gumbo-parser/src/parser.h \
+        libs/QGumboParser/gumbo-parser/src/string_buffer.h \
+        libs/QGumboParser/gumbo-parser/src/string_piece.h \
+        libs/QGumboParser/gumbo-parser/src/tag_enum.h \
+        libs/QGumboParser/gumbo-parser/src/tag_gperf.h \
+        libs/QGumboParser/gumbo-parser/src/tag_sizes.h \
+        libs/QGumboParser/gumbo-parser/src/tag_strings.h \
+        libs/QGumboParser/gumbo-parser/src/token_type.h \
+        libs/QGumboParser/gumbo-parser/src/tokenizer.h \
+        libs/QGumboParser/gumbo-parser/src/tokenizer_states.h \
+        libs/QGumboParser/gumbo-parser/src/utf8.h \
+        libs/QGumboParser/gumbo-parser/src/util.h \
+        libs/QGumboParser/gumbo-parser/src/vector.h \
+        libs/QGumboParser/qgumboattribute.h \
+        libs/QGumboParser/qgumbodocument.h \
+        libs/QGumboParser/qgumbonode.h
+
+SUBDIRS += libs/QGumboParser/QGumboParser.pro \
