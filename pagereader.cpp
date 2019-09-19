@@ -11,14 +11,14 @@
 #include <libs/QGumboParser/qgumbodocument.h>
 #include <libs/QGumboParser/qgumbonode.h>
 
-PageReader::PageReader(QWidget *parent)
-    : QWidget(parent)
+PageReader::PageReader(QObject *parent)
+    : QObject(parent)
 {
 
 }
 
-PageReader::PageReader(QString addr, QWidget *parent)
-    : QWidget(parent)
+PageReader::PageReader(QString addr, QObject *parent)
+    : QObject(parent)
 {
     downloadAndReadPage(addr);
 }

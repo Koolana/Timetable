@@ -1,19 +1,17 @@
 #ifndef PAGEREADER_H
 #define PAGEREADER_H
 
-#include <QWidget>
-#include <QString>
 #include <QNetworkAccessManager>
 
 #include <QTextEdit>
 #include <timetabledata.h>
 
-class PageReader : public QWidget
+class PageReader : public QObject
 {
     Q_OBJECT
 public:
-    PageReader(QWidget *parent = 0);
-    PageReader(QString addr, QWidget *parent = 0);
+    PageReader(QObject *parent = nullptr);
+    PageReader(QString addr, QObject *parent = nullptr);
 
     void downloadAndReadPage(QString addr);
 
