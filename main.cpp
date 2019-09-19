@@ -26,6 +26,7 @@ int main(int argc, char *argv[])
     TimeModule* tSys = new TimeModule();
 
     QObject::connect(tSys, SIGNAL(setTimeFilter(int, int)), fSys, SLOT(setTimeFilter(int, int)));
+    QObject::connect(tSys, SIGNAL(setCurrentLesson()), fSys, SLOT(setCurrentLesson()));
 
     QQmlContext *context = engine.rootContext();    // Создаём корневой контекст
     /* Загружаем объект в контекст для установки соединения,

@@ -5,7 +5,7 @@ Rectangle {
     property string currentDay: ""
     property string currentWeek: ""
 
-    color: "green"
+    color: "#2c3e50"
 
     Text {
         id: timeField
@@ -16,6 +16,8 @@ Rectangle {
 
         anchors.left: parent.left
         anchors.verticalCenter: parent.verticalCenter
+
+        color: "#ffffff"
     }
 
     Text {
@@ -25,5 +27,7 @@ Rectangle {
 
         anchors.horizontalCenter: parent.horizontalCenter
         anchors.verticalCenter: parent.verticalCenter
+
+        color: "#ffffff"
     }
 }

@@ -14,6 +14,11 @@ Window {
     Connections {
         target: fSys
 
+
+        onSendCurrentLessonToQml:{
+            view.currentIndex = num;
+        }
+
         onSendOneLessonToQml: {
             dataModel.append({
                 timeText: time,
@@ -63,13 +68,24 @@ Window {
             model: dataModel
 
             delegate: LessonView {
+                id: lessonView
                 width: parent.width
                 height: 100
 
+                curIndex: view.currentIndex
+                indexIn: model.index
                 timeFieldText: model.timeText
                 typeFieldText: model.typeText
                 nameFieldText: model.nameText
                 cabFieldText: model.cabText
+
+//                MouseArea {//выделение объекта ListView при нажатии
+//                    anchors.fill: parent
+
+//                    onClicked: {
+//                        view.currentIndex = index;
+//                    }
+//                }
             }
         }
     }

@@ -13,13 +13,12 @@ TimeModule::TimeModule(QObject *parent) : QObject(parent)
 
 void TimeModule::updateTime(){
     emit sendCurrentTimeToQml(QString::number(QDateTime::currentDateTime().time().hour()) + ":" +
-                               (QDateTime::currentDateTime().time().minute() < 10 ? "0" + QString::number(QDateTime::currentDateTime().time().minute()) : QString::number(QDateTime::currentDateTime().time().minute())));
+                             (QDateTime::currentDateTime().time().minute() < 10 ? "0" + QString::number(QDateTime::currentDateTime().time().minute()) : QString::number(QDateTime::currentDateTime().time().minute())));
+    emit setCurrentLesson();//не мгновенное отображение текущей пары
 }
 
 void TimeModule::init()
 {
-    updateTime();
-
     QDateTime nowDate = QDateTime::currentDateTime();
     QDateTime firstDate = QDateTime(QDate(nowDate.date().year(), 9, 2));//когда начался первый числитель, глобальное значение, вынести в define
 
@@ -31,6 +30,8 @@ void TimeModule::init()
 
     emit sendDayAndWeekTypeToQml(dayName, weekType ? "ЗН" : "ЧС");
     emit setTimeFilter(dayNumber, weekType ? 1 : 0);
+
+    updateTime();
 }
 
 void TimeModule::nextDay()

@@ -24,10 +24,11 @@ Item {
             font.pointSize: 40
             anchors.bottomMargin: font.pointSize/4
             text: "<"
+            color: "#666666"
         }
 
         Rectangle {
-            color: "black"
+            color: "#444444"
 
             width: parent.width + 4
             height: parent.height + 4
@@ -75,10 +76,11 @@ Item {
             font.pointSize: 40
             anchors.bottomMargin: font.pointSize/4
             text: ">"
+            color: "#666666"
         }
 
         Rectangle {
-            color: "black"
+            color: "#444444"
 
             width: parent.width + 4
             height: parent.height + 4

@@ -5,8 +5,12 @@ Rectangle {
     property string typeFieldText: "";
     property string nameFieldText: "";
     property string cabFieldText: "";
+    property int indexIn: 0;
+    property int curIndex: 0;
 
-    color: "lightblue"
+    color: indexIn == curIndex ? "#18bc9c" : "#3498db"
+
+    radius: 10
 
     Text {
         id: timeField
@@ -18,6 +22,7 @@ Rectangle {
         anchors.verticalCenter: parent.verticalCenter
         anchors.leftMargin: 0
 
+        color: "#ffffff"
         text: timeFieldText
     }
 
@@ -31,12 +36,13 @@ Rectangle {
         anchors.verticalCenter: parent.verticalCenter
         anchors.leftMargin: 0
 
+        color: "#ffffff"
         text: typeFieldText
     }
 
     Text {
         id: nameField
-        width: parent.width-150
+        width: parent.width-200
         anchors.left: typeField.right
         anchors.right: cabField.left
         renderType: Text.NativeRendering
@@ -45,6 +51,7 @@ Rectangle {
 
         anchors.centerIn: parent
 
+        color: "#ffffff"
         text: nameFieldText
     }
 
@@ -58,6 +65,7 @@ Rectangle {
         anchors.verticalCenter: parent.verticalCenter
         anchors.rightMargin: 20
 
+        color: "#ffffff"
         text: cabFieldText
     }
 }

@@ -1,6 +1,7 @@
 #include "filteringsystem.h"
 
 #include <QDebug>
+#include <QDateTime>
 
 FilteringSystem::FilteringSystem(QList<DayData*> inputWeek, QObject *parent) : QObject(parent)
 {
@@ -40,6 +41,21 @@ void FilteringSystem::setTimeFilter(int day, int weekType)
     }
 
     filteringWeek.append(newDay);
-    qDebug() << filteringWeek.at(0)->lessons.at(0)->timeStart->hour();
+    //qDebug() << filteringWeek.at(0)->lessons.at(0)->timeStart->hour();
     init();
+}
+
+void FilteringSystem::setCurrentLesson()
+{
+    for(auto day: filteringWeek)
+    {
+        for(int i = 0; i < day->lessons.count(); i++)
+        {
+            if(QDateTime::currentDateTime().time() > *day->lessons.at(i)->timeStart && QDateTime::currentDateTime().time() < *day->lessons.at(i)->timeEnd)//убрать выделение если не текущий день
+            {
+                emit sendCurrentLessonToQml(i);
+                break;
+            }
+        }
+    }
 }

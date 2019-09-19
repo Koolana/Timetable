@@ -21,6 +21,7 @@ signals:
     void sendDayAndWeekTypeToQml(QString day, QString weekType);
 
     void setTimeFilter(int day, int weekType);
+    void setCurrentLesson();
 
 public slots:
     void nextDay();
