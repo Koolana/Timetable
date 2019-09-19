@@ -4,7 +4,7 @@ import QtQuick.Window 2.12
 import "qrc:/"
 
 Window {
-    //visibility: "FullScreen"
+    visibility: "FullScreen"
     visible: true
 
     width: 640
@@ -70,7 +70,7 @@ Window {
             delegate: LessonView {
                 id: lessonView
                 width: parent.width
-                height: 100
+                height: 120
 
                 curIndex: view.currentIndex
                 indexIn: model.index
