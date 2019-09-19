@@ -56,7 +56,8 @@ SOURCES += \
         libs/QGumboParser/gumbo-parser/src/vector.c \
         libs/QGumboParser/qgumboattribute.cpp \
         libs/QGumboParser/qgumbodocument.cpp \
-        libs/QGumboParser/qgumbonode.cpp
+        libs/QGumboParser/qgumbonode.cpp \
+        timemodule.cpp
 
 RESOURCES += qml.qrc
 
@@ -77,6 +78,7 @@ HEADERS += \
         filteringsystem.h \
         pagereader.h \
         testqmlss.h \
+        timemodule.h \
         timetabledata.h \
         libs/QGumboParser/HtmlTag.h \
         libs/QGumboParser/gumbo-parser/src/attribute.h \

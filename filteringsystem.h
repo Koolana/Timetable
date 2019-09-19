@@ -15,9 +15,11 @@ signals:
     void sendOneLessonToQml(QString time, QString type, QString name, QString cab, QString lecturer);
 
 public slots:
+    void setTimeFilter(int day, int weekType);
 
 private:
     QList<DayData*> week;
+    QList<DayData*> filteringWeek;
 };
 
 #endif // FILTERINGSYSTEM_H

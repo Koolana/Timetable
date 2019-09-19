@@ -2,5 +2,7 @@
     <qresource prefix="/">
         <file>main.qml</file>
         <file>LessonView.qml</file>
+        <file>HeaderView.qml</file>
+        <file>LeftRightControlPanel.qml</file>
     </qresource>
 </RCC>

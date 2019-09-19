@@ -1,4 +1,4 @@
-import QtQuick 2.0
+import QtQuick 2.12
 
 Rectangle {
     property string timeFieldText: "";
@@ -6,8 +6,6 @@ Rectangle {
     property string nameFieldText: "";
     property string cabFieldText: "";
 
-    width: parent.width
-    height: 100
     color: "lightblue"
 
     Text {
@@ -38,7 +36,7 @@ Rectangle {
 
     Text {
         id: nameField
-        width: 200
+        width: parent.width-150
         anchors.left: typeField.right
         anchors.right: cabField.left
         renderType: Text.NativeRendering
