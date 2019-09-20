@@ -10,18 +10,22 @@ class FilteringSystem : public QObject
 public:
     explicit FilteringSystem(QList<DayData*> inputWeek, QObject *parent = nullptr);
     void init();
+    bool isCurrentLesson(Lesson* less);
+    bool isCurrentLesson(Lesson* less, int numDay);
 
 signals:
-    void sendOneLessonToQml(QString time, QString type, QString name, QString cab, QString lecturer);
+    void sendOneLessonToQml(QString time, QString type, QString name, QString cab, QString lecturer, bool isCur);
     void sendCurrentLessonToQml(int num);
 
 public slots:
     void setTimeFilter(int day, int weekType);
-    void setCurrentLesson();
+//    void setCurrentLesson();
 
 private:
     QList<DayData*> week;
     QList<DayData*> filteringWeek;
+
+    bool isCurrentDay;
 };
 
 #endif // FILTERINGSYSTEM_H

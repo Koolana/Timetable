@@ -14,16 +14,15 @@ TimeModule::TimeModule(QObject *parent) : QObject(parent)
 void TimeModule::updateTime(){
     emit sendCurrentTimeToQml(QString::number(QDateTime::currentDateTime().time().hour()) + ":" +
                              (QDateTime::currentDateTime().time().minute() < 10 ? "0" + QString::number(QDateTime::currentDateTime().time().minute()) : QString::number(QDateTime::currentDateTime().time().minute())));
-    emit setCurrentLesson();//не мгновенное отображение текущей пары
+//    emit setCurrentLesson();//не мгновенное отображение текущей пары
 }
 
 void TimeModule::init()
 {
     QDateTime nowDate = QDateTime::currentDateTime();
-    QDateTime firstDate = QDateTime(QDate(nowDate.date().year(), 9, 2));//когда начался первый числитель, глобальное значение, вынести в define
 
-    dayNumber = firstDate.daysTo(nowDate) % 7 + 1;
-    weekType = firstDate.daysTo(nowDate) / 7 % 2 ? 1 : 0;
+    dayNumber = nowDate.date().dayOfWeek();
+    weekType = getCurrentWeekType(nowDate);
 
     QString dayName = QDateTime::currentDateTime().date().longDayName(dayNumber);//повтор
     dayName[0] = dayName[0].toUpper();//повтор
@@ -76,5 +75,10 @@ void TimeModule::prevDay()
 
     emit sendDayAndWeekTypeToQml(dayName, weekType ? "ЗН" : "ЧС");
     emit setTimeFilter(dayNumber, weekType ? 1 : 0);
+}
+
+int TimeModule::getCurrentWeekType(QDateTime nowDate){
+    QDateTime firstDate = QDateTime(QDate(nowDate.date().year(), 9, 2));//когда начался первый числитель, глобальное значение, вынести в define
+    return firstDate.daysTo(nowDate) / 7 % 2 ? 1 : 0;
 }
 

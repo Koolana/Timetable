@@ -4,7 +4,7 @@ import QtQuick.Window 2.12
 import "qrc:/"
 
 Window {
-    visibility: "FullScreen"
+    //visibility: "FullScreen"
     visible: true
 
     width: 640
@@ -14,10 +14,9 @@ Window {
     Connections {
         target: fSys
 
-
-        onSendCurrentLessonToQml:{
-            view.currentIndex = num;
-        }
+//        onSendCurrentLessonToQml:{
+//            view.currentIndex = num;
+//        }
 
         onSendOneLessonToQml: {
             dataModel.append({
@@ -25,7 +24,8 @@ Window {
                 typeText: type,
                 nameText: name,
                 cabText: cab,
-                lecturerText: lecturer
+                lecturerText: lecturer,
+                color: isCur ? "#18bc9c" : "#ffffff",
             });
         }
     }
@@ -72,8 +72,21 @@ Window {
                 width: parent.width
                 height: 120
 
-                curIndex: view.currentIndex
-                indexIn: model.index
+                color: {
+                    if( model.typeText === "(лек)"){
+                        "#18bc9c";
+                    }else{
+                        if( model.typeText === "(сем)")
+                        {
+                            "#3498db"
+                        }else{
+                            "#dddddd"
+                        }
+                    }
+                }
+                //border.color: model.color
+                backColor: model.color
+
                 timeFieldText: model.timeText
                 typeFieldText: model.typeText
                 nameFieldText: model.nameText

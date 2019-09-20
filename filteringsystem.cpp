@@ -1,4 +1,5 @@
 #include "filteringsystem.h"
+#include "timemodule.h"
 
 #include <QDebug>
 #include <QDateTime>
@@ -22,7 +23,8 @@ void FilteringSystem::init()
                                     lesson->lessonType,
                                     lesson->lessonName,
                                     lesson->lessonCab,
-                                    lesson->lessonLecturer);
+                                    lesson->lessonLecturer,
+                                    isCurrentDay? isCurrentLesson(lesson) : false);
 
         }
     }
@@ -31,6 +33,8 @@ void FilteringSystem::init()
 void FilteringSystem::setTimeFilter(int day, int weekType)
 {
     filteringWeek.clear();
+
+    isCurrentDay = (day == QDateTime::currentDateTime().date().dayOfWeek() && weekType == TimeModule::getCurrentWeekType(QDateTime::currentDateTime()));
 
     DayData* newDay = new DayData;
     for(auto lesson: week.at(day - 1)->lessons)
@@ -45,17 +49,36 @@ void FilteringSystem::setTimeFilter(int day, int weekType)
     init();
 }
 
-void FilteringSystem::setCurrentLesson()
-{
-    for(auto day: filteringWeek)
+//void FilteringSystem::setCurrentLesson()
+//{
+//    for(auto day: filteringWeek)
+//    {
+//        for(int i = 0; i < day->lessons.count(); i++)
+//        {
+//            if(isCurrentLesson(day->lessons.at(i)))
+//            {
+//                emit sendCurrentLessonToQml(i);
+//                break;
+//            }
+//        }
+//    }
+//}
+
+bool FilteringSystem::isCurrentLesson(Lesson* less){
+    if(QDateTime::currentDateTime().time() > *less->timeStart && QDateTime::currentDateTime().time() < *less->timeEnd)//убрать выделение если не текущий день
     {
-        for(int i = 0; i < day->lessons.count(); i++)
-        {
-            if(QDateTime::currentDateTime().time() > *day->lessons.at(i)->timeStart && QDateTime::currentDateTime().time() < *day->lessons.at(i)->timeEnd)//убрать выделение если не текущий день
-            {
-                emit sendCurrentLessonToQml(i);
-                break;
-            }
-        }
+        return true;
     }
+
+    return false;
+}
+
+bool FilteringSystem::isCurrentLesson(Lesson* less, int numDay){
+    qDebug() << numDay << " " << QDateTime::currentDateTime().date().dayOfWeek();
+    if(QDateTime::currentDateTime().time() > *less->timeStart && QDateTime::currentDateTime().time() < *less->timeEnd && numDay == QDateTime::currentDateTime().date().dayOfWeek())//убрать выделение если не текущий день
+    {
+        return true;
+    }
+
+    return false;
 }

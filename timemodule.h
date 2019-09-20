@@ -10,6 +10,7 @@ class TimeModule : public QObject
 public:
     explicit TimeModule(QObject *parent = nullptr);
     void init();
+    static int getCurrentWeekType(QDateTime nowDate);
 
 private:
     QTimer *tmr;
@@ -21,7 +22,7 @@ signals:
     void sendDayAndWeekTypeToQml(QString day, QString weekType);
 
     void setTimeFilter(int day, int weekType);
-    void setCurrentLesson();
+//    void setCurrentLesson();
 
 public slots:
     void nextDay();

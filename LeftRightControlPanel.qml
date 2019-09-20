@@ -22,7 +22,7 @@ Item {
             anchors.centerIn: parent.Center
 
             font.pointSize: 40
-            anchors.bottomMargin: font.pointSize/4
+            anchors.bottomMargin: font.pointSize/5
             text: "<"
             color: "#666666"
         }
@@ -74,7 +74,7 @@ Item {
             anchors.centerIn: parent.Center
 
             font.pointSize: 40
-            anchors.bottomMargin: font.pointSize/4
+            anchors.bottomMargin: font.pointSize/5
             text: ">"
             color: "#666666"
         }

@@ -5,10 +5,8 @@ Rectangle {
     property string typeFieldText: "";
     property string nameFieldText: "";
     property string cabFieldText: "";
-    property int indexIn: 0;
-    property int curIndex: 0;
 
-    color: indexIn == curIndex ? "#18bc9c" : "#3498db"
+    property string backColor: "";
 
     radius: 10
 
@@ -67,5 +65,21 @@ Rectangle {
 
         color: "#ffffff"
         text: cabFieldText
+    }
+
+    Rectangle {
+        id: backEl
+        color: backColor
+
+        width: parent.width + 20
+        height: parent.height
+        anchors.leftMargin: - 10
+
+        smooth: true
+
+        z: -1
+        opacity: 0.7
+        anchors.left: parent.left
+        anchors.top: parent.top
     }
 }
