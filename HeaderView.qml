@@ -123,7 +123,7 @@ Rectangle {
                         }
 
                         border.width: 1
-                        border.color: "#2c3e90"
+                        border.color: "#5c6ea0"
                     }
 
                     Rectangle{
@@ -157,11 +157,13 @@ Rectangle {
                                 inViewCombo.visible =! inViewCombo.visible
 
                                 tSys.setDay(model.index);
+
+                                inViewCombo.currentIndex = model.index
                             }
                         }
 
-                        border.width: 1
-                        border.color: "#2c3e90"
+                        border.width: inViewCombo.currentIndex == model.index ? 5 : 1
+                        border.color: "#5c6ea0"
                     }
 
                     Rectangle{
@@ -195,11 +197,13 @@ Rectangle {
                                 inViewCombo.visible =! inViewCombo.visible
 
                                 tSys.setDay(model.index + 7);
+
+                                inViewCombo.currentIndex = model.index + 6
                             }
                         }
 
-                        border.width: 1
-                        border.color: "#2c3e90"
+                        border.width: inViewCombo.currentIndex == model.index + 6 ? 5 : 1
+                        border.color: "#5c6ea0"
                     }
                 }
             }
