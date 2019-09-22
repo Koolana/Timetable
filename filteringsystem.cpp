@@ -37,6 +37,7 @@ void FilteringSystem::setTimeFilter(int day, int weekType)
     isCurrentDay = (day == QDateTime::currentDateTime().date().dayOfWeek() && weekType == TimeModule::getCurrentWeekType(QDateTime::currentDateTime()));
 
     DayData* newDay = new DayData;
+
     for(auto lesson: week.at(day - 1)->lessons)
     {
         if(lesson->NumeratorDenumerataor == weekType || lesson->NumeratorDenumerataor == 2){

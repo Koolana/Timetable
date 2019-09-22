@@ -22,6 +22,7 @@ int main(int argc, char *argv[])
 
     QString addr = QString("https://students.bmstu.ru/schedule/62ec2eb2-a264-11e5-aa40-005056960017");
     PageReader* reader = new PageReader(addr);
+
     FilteringSystem* fSys = new FilteringSystem(reader->week);
     TimeModule* tSys = new TimeModule();
 

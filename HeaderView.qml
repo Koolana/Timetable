@@ -2,11 +2,14 @@ import QtQuick 2.12
 import QtQuick.Controls 1.2
 import QtQuick.Controls.Private 1.0
 import QtQuick.Controls.Styles 1.4
+import QtQuick.Layouts 1.3
 
 Rectangle {
     property string currentTime: ""
     property string currentDay: ""
     property string currentWeek: ""
+    property string currentDate: ""
+    property bool isCh: true
 
     color: "#2c3e50"
 
@@ -45,9 +48,12 @@ Rectangle {
 
         ListModel{
             id: dataModel
-            ListElement{ text: "Day" }
-            ListElement{ text: "Week" }
-            ListElement{ text: "Month" }
+            ListElement{ text: "Понедельник" }
+            ListElement{ text: "Вторник" }
+            ListElement{ text: "Среда" }
+            ListElement{ text: "Четверг" }
+            ListElement{ text: "Пятница" }
+            ListElement{ text: "Суббота" }
         }
 
         Rectangle {
@@ -64,7 +70,9 @@ Rectangle {
             Text {
                 id: dayField
 
-                text: currentDay + " (" + currentWeek + ")";
+                horizontalAlignment: Text.AlignHCenter
+                verticalAlignment: Text.AlignVCenter
+                text: currentDay + " (" + currentWeek + ")\n" + currentDate;
 
                 anchors.horizontalCenter: parent.horizontalCenter
                 anchors.verticalCenter: parent.verticalCenter
@@ -76,7 +84,7 @@ Rectangle {
                 anchors.fill: parent
 
                 onClicked: {
-                    console.log("clc");
+                    //console.log("clc");
                     inViewCombo.visible =! inViewCombo.visible
                 }
             }
@@ -86,7 +94,6 @@ Rectangle {
 
                 visible: false
                 height: comboEl.height * dataModel.count
-
                 anchors.top: parent.bottom
                 model: dataModel
 
@@ -96,27 +103,103 @@ Rectangle {
 
                     color: "#2c3e50"
 
-                    border.width: 1
-                    border.color: "#2c3e90"
+                    Rectangle{
+                        id: delegDayField
+                        anchors.left: parent.left
+                        anchors.top: parent.top
+                        anchors.bottom: parent.bottom
 
-                    Text {
-                        anchors.horizontalCenter: parent.horizontalCenter
-                        anchors.verticalCenter: parent.verticalCenter
+                        color: parent.color
 
-                        color: "#ffffff"
+                        width: 100
 
-                        text: model.text
+                        Text {
+                            anchors.horizontalCenter: parent.horizontalCenter
+                            anchors.verticalCenter: parent.verticalCenter
+
+                            color: "#ffffff"
+
+                            text: model.text
+                        }
+
+                        border.width: 1
+                        border.color: "#2c3e90"
                     }
 
-                    MouseArea{
-                        anchors.fill: parent
+                    Rectangle{
+                        anchors.left: delegDayField.right
+                        anchors.top: parent.top
+                        anchors.bottom: parent.bottom
 
-                        onClicked: {
-                            console.log(model.index);
-                            view.currentIndex = model.index
-                            dayField.text = model.text
-                            inViewCombo.visible =! inViewCombo.visible
+                        width: (parent.width - delegDayField.width) / 2
+
+                        color: parent.color
+
+                        Text{
+                            id: oneTextField
+                            anchors.fill: parent
+                            horizontalAlignment: Text.AlignHCenter
+                            verticalAlignment: Text.AlignVCenter
+
+                            color: "#ffffff"
+
+                            text: isCh ? "ЧС" : "ЗН"
                         }
+
+
+                        MouseArea{
+                            anchors.fill: parent
+
+                            onClicked: {
+                                //console.log(model.index);
+                                //view.currentIndex = model.index
+                                //dayField.text = model.text + " (" + ch.text + ")"
+                                inViewCombo.visible =! inViewCombo.visible
+
+                                tSys.setDay(model.index);
+                            }
+                        }
+
+                        border.width: 1
+                        border.color: "#2c3e90"
+                    }
+
+                    Rectangle{
+                        anchors.right: parent.right
+                        anchors.top: parent.top
+                        anchors.bottom: parent.bottom
+
+                        width: (parent.width - delegDayField.width) / 2
+
+                        color: parent.color
+
+                        Text{
+                            id: twoTextField
+                            anchors.fill: parent
+                            horizontalAlignment: Text.AlignHCenter
+                            verticalAlignment: Text.AlignVCenter
+
+                            color: "#ffffff"
+
+                            text: !isCh ? "ЧС" : "ЗН"
+                        }
+
+
+                        MouseArea{
+                            anchors.fill: parent
+
+                            onClicked: {
+                                //console.log(model.index);
+                                //view.currentIndex = model.index
+                                //dayField.text = model.text + " (" + zn.text + ")"
+                                inViewCombo.visible =! inViewCombo.visible
+
+                                tSys.setDay(model.index + 7);
+                            }
+                        }
+
+                        border.width: 1
+                        border.color: "#2c3e90"
                     }
                 }
             }
