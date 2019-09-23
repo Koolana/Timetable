@@ -2,6 +2,7 @@
 #define TIMEMODULE_H
 
 #include <QObject>
+#include <QDateTime>
 #include <QTimer>
 
 class TimeModule : public QObject
@@ -16,10 +17,12 @@ private:
     QTimer *tmr;
     int dayNumber;
     int weekType;
+    QDateTime nowDate;
 
 signals:
     void sendCurrentTimeToQml(QString time);
-    void sendDayAndWeekTypeToQml(QString day, QString weekType);
+    void sendDayAndWeekTypeToQml(QString day, QString weekType, QString date);
+    void sendFirstInitToQml(bool isCh);
 
     void setTimeFilter(int day, int weekType);
 //    void setCurrentLesson();
@@ -27,6 +30,7 @@ signals:
 public slots:
     void nextDay();
     void prevDay();
+    void setDay(int dayChZn);
 
 private slots:
     void updateTime();

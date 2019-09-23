@@ -1,14 +1,14 @@
 import QtQuick 2.12
 import QtQuick.Window 2.12
 
-import "qrc:/"
+//import "qrc:/" //в винде это надо комментить //линухе !//
 
 Window {
     //visibility: "FullScreen"
     visible: true
 
-    width: 640
-    height: 480
+    width: 450
+    height: 800
     title: qsTr("Hello World")
 
     Connections {
@@ -33,6 +33,10 @@ Window {
     Connections {
         target: tSys
 
+        onSendFirstInitToQml: {
+            header.isCh = isCh
+        }
+
         onSendCurrentTimeToQml: {
             header.currentTime = time
         }
@@ -40,6 +44,7 @@ Window {
         onSendDayAndWeekTypeToQml: {
             header.currentDay = day
             header.currentWeek = weekType
+            header.currentDate = date
             dataModel.clear()
         }
     }
@@ -115,6 +120,8 @@ Window {
         currentTime: "--:--"
         currentDay: "--"
         currentWeek: "--"
+        currentDate: "--"
+        isCh: true
     }
 
     LeftRightControlPanel{
