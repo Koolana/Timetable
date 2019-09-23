@@ -9,7 +9,40 @@ Rectangle {
     property string currentDay: ""
     property string currentWeek: ""
     property string currentDate: ""
+    property int indexTodayDay: 0
     property bool isCh: true
+
+    signal nextDateEnd();
+    signal prevDateEnd();
+    signal notEnd();
+
+    function nextDate(){
+        inViewCombo.currentIndex++;
+
+        if(inViewCombo.currentIndex == 11){
+            nextDateEnd();
+        }
+
+        if(inViewCombo.currentIndex > 11){
+            inViewCombo.currentIndex = 0;
+        }
+
+        inViewCombo.visible = false;
+    }
+
+    function prevDate(){
+        inViewCombo.currentIndex--;
+
+        if(inViewCombo.currentIndex == 0){
+            prevDateEnd();
+        }
+
+        if(inViewCombo.currentIndex < 0){
+            inViewCombo.currentIndex = 11;
+        }
+
+        inViewCombo.visible = false;
+    }
 
     color: "#2c3e50"
 
@@ -92,13 +125,15 @@ Rectangle {
             ListView {
                 id: inViewCombo
 
+                currentIndex: indexTodayDay;
+
                 visible: false
                 height: comboEl.height * dataModel.count
                 anchors.top: parent.bottom
                 model: dataModel
 
                 delegate: Rectangle {
-                    width: comboEl.width
+                    width: comboEl.width + 20
                     height: comboEl.height
 
                     color: "#2c3e50"
@@ -111,7 +146,7 @@ Rectangle {
 
                         color: parent.color
 
-                        width: 100
+                        width: 120
 
                         Text {
                             anchors.horizontalCenter: parent.horizontalCenter
@@ -159,11 +194,17 @@ Rectangle {
                                 tSys.setDay(model.index);
 
                                 inViewCombo.currentIndex = model.index
+
+                                if(inViewCombo.currentIndex == 0){
+                                    prevDateEnd();
+                                }else{
+                                    notEnd();
+                                }
                             }
                         }
 
-                        border.width: inViewCombo.currentIndex == model.index ? 5 : 1
-                        border.color: "#5c6ea0"
+                        border.width: inViewCombo.currentIndex == model.index ? 5 : indexTodayDay === model.index ? 3 : 1
+                        border.color: indexTodayDay === model.index ? "#18bc9c" : "#5c6ea0"
                     }
 
                     Rectangle{
@@ -199,6 +240,12 @@ Rectangle {
                                 tSys.setDay(model.index + 7);
 
                                 inViewCombo.currentIndex = model.index + 6
+
+                                if(inViewCombo.currentIndex == 11){
+                                    nextDateEnd();
+                                }else{
+                                    notEnd();
+                                }
                             }
                         }
 

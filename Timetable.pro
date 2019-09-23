@@ -42,7 +42,6 @@ SOURCES += \
         filteringsystem.cpp \
         main.cpp \
         pagereader.cpp \
-        testqmlss.cpp \
         libs/QGumboParser/gumbo-parser/src/attribute.c \
         libs/QGumboParser/gumbo-parser/src/char_ref.c \
         libs/QGumboParser/gumbo-parser/src/error.c \
@@ -64,7 +63,6 @@ RESOURCES += qml.qrc
 HEADERS += \
         filteringsystem.h \
         pagereader.h \
-        testqmlss.h \
         timemodule.h \
         timetabledata.h \
         libs/QGumboParser/HtmlTag.h \

@@ -35,7 +35,7 @@ void TimeModule::init()
 
     emit sendDayAndWeekTypeToQml(dayName, weekType ? "ЗН" : "ЧС", nowDate.date().toString("dd.MM.yy"));
     emit setTimeFilter(dayNumber, weekType ? 1 : 0);
-    emit sendFirstInitToQml(!weekType);
+    emit sendFirstInitToQml(!weekType, dayNumber);
 
     updateTime();
 }
@@ -91,7 +91,7 @@ int TimeModule::getCurrentWeekType(QDateTime nowInDate){
 
 //установить дату из выпадающего меню
 //работает
-void TimeModule::setDay(int dayChZn)
+void TimeModule::setDay(int dayChZn)//int dayChZn - номер нажатой кнопки 0-6 - левый столбец, 8-13 - правый столбец
 {
     int timeOffset = dayChZn - (dayNumber - 1) - abs(getCurrentWeekType(QDateTime::currentDateTime()) - weekType) * 7;
     nowDate = QDateTime(nowDate.date().addDays(timeOffset));

@@ -22,7 +22,7 @@ private:
 signals:
     void sendCurrentTimeToQml(QString time);
     void sendDayAndWeekTypeToQml(QString day, QString weekType, QString date);
-    void sendFirstInitToQml(bool isCh);
+    void sendFirstInitToQml(bool isCh, int indexTodayDay);
 
     void setTimeFilter(int day, int weekType);
 //    void setCurrentLesson();

@@ -35,6 +35,11 @@ Window {
 
         onSendFirstInitToQml: {
             header.isCh = isCh
+            header.indexTodayDay = indexTodayDay - 1
+
+            if(indexTodayDay == 1){
+                lrButtons.offPrevDay();
+            }
         }
 
         onSendCurrentTimeToQml: {
@@ -108,7 +113,6 @@ Window {
         }
     }
 
-
     HeaderView{
         id: header
 
@@ -121,10 +125,24 @@ Window {
         currentDay: "--"
         currentWeek: "--"
         currentDate: "--"
-        isCh: true
+
+        onNextDateEnd: {
+            lrButtons.offNextDay();
+        }
+
+        onPrevDateEnd: {
+            lrButtons.offPrevDay();
+        }
+
+        onNotEnd: {
+            lrButtons.unlockNextDay();
+            lrButtons.unlockPrevDay();
+        }
     }
 
     LeftRightControlPanel{
+        id: lrButtons
+
         anchors.right: parent.right
         anchors.bottom: parent.bottom
         anchors.rightMargin: 10
@@ -132,5 +150,13 @@ Window {
 
         height: 70
         width: 150
+
+        onNextDate: {
+            header.nextDate();
+        }
+
+        onPrevDate: {
+            header.prevDate();
+        }
     }
 }

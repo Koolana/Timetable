@@ -2,6 +2,42 @@ import QtQuick 2.12
 import QtGraphicalEffects 1.13
 
 Item {
+    id: lrButtons
+    signal nextDate();
+    signal prevDate();
+
+    function offNextDay(){
+        leftBut.anchors.right = lrButtons.right
+        leftBut.width = lrButtons.width
+
+        rightBut.visible = false;
+        unlockPrevDay();
+    }
+
+    function offPrevDay(){
+        rightBut.anchors.left = lrButtons.left
+        rightBut.width = lrButtons.width
+
+        rightBut.anchors.leftMargin = 0
+
+        leftBut.visible = false;
+        unlockNextDay();
+    }
+
+    function unlockNextDay(){
+        leftBut.anchors.right = undefined
+        leftBut.width = lrButtons.width / 2 - 5
+
+        rightBut.visible = true;
+    }
+
+    function unlockPrevDay(){
+        rightBut.anchors.left = undefined
+        rightBut.width = lrButtons.width/2 - 5
+
+        leftBut.visible = true;
+    }
+
     Rectangle{
         id: leftBut
 
@@ -11,6 +47,7 @@ Item {
         anchors.top: parent.top
         anchors.bottom: parent.bottom
         anchors.left: parent.left
+        //anchors.right: parent.right
 
         color: "White"
 
@@ -49,6 +86,9 @@ Item {
 
             onClicked: {
                 tSys.prevDay();
+                lrButtons.prevDate();
+
+                unlockNextDay();
             }
         }
     }
@@ -62,6 +102,7 @@ Item {
         anchors.top: parent.top
         anchors.bottom: parent.bottom
         anchors.right: parent.right
+
         anchors.leftMargin: 10
 
         color: "White"
@@ -101,6 +142,9 @@ Item {
 
             onClicked: {
                 tSys.nextDay();
+                lrButtons.nextDate();
+
+                unlockPrevDay();
             }
         }
     }
