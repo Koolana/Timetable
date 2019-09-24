@@ -1,5 +1,6 @@
 import QtQuick 2.12
 import QtGraphicalEffects 1.13
+import QtQuick.Shapes 1.13
 
 Item {
     id: lrButtons
@@ -51,17 +52,41 @@ Item {
 
         color: "White"
 
-        Text{
-            anchors.fill: parent
-            renderType: Text.NativeRendering
-            horizontalAlignment: Text.AlignHCenter
-            verticalAlignment: Text.AlignVCenter
-            anchors.centerIn: parent.Center
+//        Text{
+//            anchors.fill: parent
+//            renderType: Text.NativeRendering
+//            horizontalAlignment: Text.AlignHCenter
+//            verticalAlignment: Text.AlignVCenter
+//            anchors.centerIn: parent.Center
 
-            font.pointSize: 40
-            anchors.bottomMargin: font.pointSize/5
-            text: "<"
-            color: "#666666"
+//            font.pointSize: 40
+//            anchors.bottomMargin: font.pointSize/5
+//            text: "<"
+//            color: "#666666"
+//        }
+
+        Shape {
+            width: parent.width
+            height: parent.height
+
+            anchors.horizontalCenter: parent.horizontalCenter
+            anchors.verticalCenter: parent.verticalCenter
+            antialiasing: true
+
+            ShapePath {
+                //ashPattern: [ 1, 4 ]
+                fillColor: leftBut.color
+                strokeWidth: 5
+                strokeColor: "#666666"
+
+                capStyle: ShapePath.RoundCap
+                joinStyle: ShapePath.RoundJoin
+
+                startX: leftBut.width / 2 + 10; startY: leftBut.height / 2 - 15
+                PathLine { x: leftBut.width / 2 + 10; y: leftBut.height / 2 - 15 }
+                PathLine { x: leftBut.width / 2 - 15; y: leftBut.height / 2 }
+                PathLine { x: leftBut.width / 2 + 10; y: leftBut.height / 2 + 15 }
+            }
         }
 
         Rectangle {
@@ -107,17 +132,41 @@ Item {
 
         color: "White"
 
-        Text{
-            anchors.fill: parent
-            renderType: Text.NativeRendering
-            horizontalAlignment: Text.AlignHCenter
-            verticalAlignment: Text.AlignVCenter
-            anchors.centerIn: parent.Center
+//        Text{
+//            anchors.fill: parent
+//            renderType: Text.NativeRendering
+//            horizontalAlignment: Text.AlignHCenter
+//            verticalAlignment: Text.AlignVCenter
+//            anchors.centerIn: parent.Center
 
-            font.pointSize: 40
-            anchors.bottomMargin: font.pointSize/5
-            text: ">"
-            color: "#666666"
+//            font.pointSize: 40
+//            anchors.bottomMargin: font.pointSize/5
+//            text: ">"
+//            color: "#666666"
+//        }
+
+        Shape {
+            width: parent.width
+            height: parent.height
+
+            anchors.horizontalCenter: parent.horizontalCenter
+            anchors.verticalCenter: parent.verticalCenter
+            antialiasing: true
+
+            ShapePath {
+                //ashPattern: [ 1, 4 ]
+                fillColor: rightBut.color
+                strokeWidth: 5
+                strokeColor: "#666666"
+
+                capStyle: ShapePath.RoundCap
+                joinStyle: ShapePath.RoundJoin
+
+                startX: rightBut.width / 2 - 10; startY: rightBut.height / 2 - 15
+                PathLine { x: rightBut.width / 2 - 10; y: rightBut.height / 2 - 15 }
+                PathLine { x: rightBut.width / 2 + 15; y: rightBut.height / 2 }
+                PathLine { x: rightBut.width / 2 - 10; y: rightBut.height / 2 + 15 }
+            }
         }
 
         Rectangle {

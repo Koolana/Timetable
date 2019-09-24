@@ -9,7 +9,7 @@ Window {
 
     width: 450
     height: 800
-    title: qsTr("Hello World")
+    title: qsTr("Timetable")
 
     Connections {
         target: fSys
@@ -40,6 +40,8 @@ Window {
             if(indexTodayDay == 1){
                 lrButtons.offPrevDay();
             }
+
+            header.setTodayIndex();
         }
 
         onSendCurrentTimeToQml: {
@@ -102,13 +104,18 @@ Window {
                 nameFieldText: model.nameText
                 cabFieldText: model.cabText
 
-//                MouseArea {//выделение объекта ListView при нажатии
-//                    anchors.fill: parent
+                MouseArea {//выделение объекта ListView при нажатии
+                    anchors.fill: parent
 
-//                    onClicked: {
-//                        view.currentIndex = index;
-//                    }
-//                }
+                    onClicked: {
+                        header.offComboBox();
+                        //view.currentIndex = index;
+                    }
+
+                    onPressed: {
+                        header.offComboBox();
+                    }
+                }
             }
         }
     }
@@ -139,6 +146,35 @@ Window {
             lrButtons.unlockPrevDay();
         }
     }
+
+//    BackButton{
+//        id: bckButton
+
+//        anchors.right: parent.right
+//        anchors.bottom: lrButtons.top
+//        anchors.rightMargin: 10
+//        anchors.bottomMargin: 10
+
+//        height: 70
+//        width: 70
+
+//        indexTodayDay: header.indexTodayDay
+
+//        onPrevDateEnd: {
+//            lrButtons.offPrevDay();
+
+//            header.setTodayIndex();
+//            header.offComboBox();
+//        }
+
+//        onNotEnd: {
+//            lrButtons.unlockNextDay();
+//            lrButtons.unlockPrevDay();
+
+//            header.setTodayIndex();
+//            header.offComboBox();
+//        }
+//    }
 
     LeftRightControlPanel{
         id: lrButtons

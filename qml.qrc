@@ -4,5 +4,6 @@
         <file>LessonView.qml</file>
         <file>HeaderView.qml</file>
         <file>LeftRightControlPanel.qml</file>
+        <file>BackButton.qml</file>
     </qresource>
 </RCC>

@@ -3,6 +3,7 @@ import QtQuick.Controls 1.2
 import QtQuick.Controls.Private 1.0
 import QtQuick.Controls.Styles 1.4
 import QtQuick.Layouts 1.3
+import QtQuick.Shapes 1.13
 
 Rectangle {
     property string currentTime: ""
@@ -16,32 +17,51 @@ Rectangle {
     signal prevDateEnd();
     signal notEnd();
 
-    function nextDate(){
-        inViewCombo.currentIndex++;
+    function setIndex(ind){
+        inViewCombo.currentIndex = ind;
 
-        if(inViewCombo.currentIndex == 11){
+        if(ind == 11){
             nextDateEnd();
+        }else{
+            if(ind == 0){
+                prevDateEnd();
+            }else{
+                notEnd();
+            }
         }
 
-        if(inViewCombo.currentIndex > 11){
+        if(ind > 11){
             inViewCombo.currentIndex = 0;
         }
 
-        inViewCombo.visible = false;
-    }
-
-    function prevDate(){
-        inViewCombo.currentIndex--;
-
-        if(inViewCombo.currentIndex == 0){
-            prevDateEnd();
-        }
-
-        if(inViewCombo.currentIndex < 0){
+        if(ind < 0){
             inViewCombo.currentIndex = 11;
         }
 
+        if(ind == indexTodayDay)
+        {
+            bckButton.visible = false
+        }else{
+            bckButton.visible = true
+        }
+
+        offComboBox();
+    }
+
+    function setTodayIndex(){
+        setIndex(indexTodayDay);
+    }
+
+    function offComboBox(){
         inViewCombo.visible = false;
+    }
+
+    function nextDate(){
+        setIndex(++inViewCombo.currentIndex);
+    }
+
+    function prevDate(){
+        setIndex(--inViewCombo.currentIndex);
     }
 
     color: "#2c3e50"
@@ -59,16 +79,75 @@ Rectangle {
         color: "#ffffff"
     }
 
-//    Text {
-//        id: dayField
 
-//        text: currentDay + " (" + currentWeek + ")";
+    Rectangle{
+        id: bckButton
+        width: parent.height
 
-//        anchors.horizontalCenter: parent.horizontalCenter
-//        anchors.verticalCenter: parent.verticalCenter
+        anchors.right: parent.right
+        anchors.top: parent.top
+        anchors.bottom: parent.bottom
+        anchors.rightMargin: 10
 
-//        color: "#ffffff"
-//    }
+        color: "#2c3e50"
+
+        border.width: 3
+        border.color: "#18bc9c"
+        radius: 10
+
+//        Shape {
+//            width: parent.width
+//            height: parent.height
+
+//            anchors.left: parent.left
+//            anchors.verticalCenter: parent.verticalCenter
+
+//            ShapePath {
+//                //ashPattern: [ 1, 4 ]
+//                fillColor: bckButton.color
+//                strokeWidth: 3
+//                strokeColor: "#ffffff"
+
+//                capStyle: ShapePath.RoundCap
+//                joinStyle: ShapePath.RoundJoin
+
+//                startX: 20 + 10; startY: bckButton.height / 2 - 15
+//                PathLine { x: 20 + 10; y: bckButton.height / 2 - 15 }
+//                PathLine { x: 20 - 15; y: bckButton.height / 2 }
+//                PathLine { x: 20 + 10; y: bckButton.height / 2 + 15 }
+//            }
+//        }
+
+        Text{
+            width: parent.width
+            height: parent.height
+
+            anchors.horizontalCenter: parent.horizontalCenter
+            anchors.verticalCenter: parent.verticalCenter
+            horizontalAlignment: Text.AlignHCenter
+            verticalAlignment: Text.AlignVCenter
+
+            color: "#ffffff"
+
+            text: "To\nToday"
+        }
+
+        MouseArea{
+            anchors.fill: parent
+
+            onClicked: {
+                tSys.setDay(indexTodayDay);
+
+                if(indexTodayDay == 0){
+                    prevDateEnd();
+                }else{
+                    notEnd();
+                }
+
+                setTodayIndex();
+            }
+        }
+    }
 
     //Сделать выпадающее меню с выбором дня
     Item {
@@ -96,9 +175,31 @@ Rectangle {
 
             anchors.top: parent.top
             anchors.bottom: parent.bottom
-            width: 200
+            width: 220
+
+            border.width: 3
+            border.color: inViewCombo.currentIndex == indexTodayDay ? "#18bc9c" : "#5c6ea0"
+            radius: 10
 
             color: parent.parent.color
+
+            Shape {
+                width: 12
+                height: 10
+
+                anchors.rightMargin: 20
+                anchors.right: parent.right
+                anchors.verticalCenter: parent.verticalCenter
+                ShapePath {
+                    //ashPattern: [ 1, 4 ]
+
+                    startX: 0; startY: 0
+                    PathLine { x: 0; y: 0 }
+                    PathLine { x: 6; y: 10 }
+                    PathLine { x: 12; y: 0 }
+                    PathLine { x: 0; y: 0 }
+                }
+            }
 
             Text {
                 id: dayField
@@ -133,10 +234,11 @@ Rectangle {
                 model: dataModel
 
                 delegate: Rectangle {
-                    width: comboEl.width + 20
+                    width: comboEl.width
                     height: comboEl.height
 
                     color: "#2c3e50"
+                    radius: 10
 
                     Rectangle{
                         id: delegDayField
@@ -144,7 +246,7 @@ Rectangle {
                         anchors.top: parent.top
                         anchors.bottom: parent.bottom
 
-                        color: parent.color
+                        color: "#2c3e50"
 
                         width: 120
 
@@ -159,6 +261,7 @@ Rectangle {
 
                         border.width: 1
                         border.color: "#5c6ea0"
+                        radius: 10
                     }
 
                     Rectangle{
@@ -168,7 +271,7 @@ Rectangle {
 
                         width: (parent.width - delegDayField.width) / 2
 
-                        color: parent.color
+                        color: "#2c3e50"
 
                         Text{
                             id: oneTextField
@@ -186,25 +289,15 @@ Rectangle {
                             anchors.fill: parent
 
                             onClicked: {
-                                //console.log(model.index);
-                                //view.currentIndex = model.index
-                                //dayField.text = model.text + " (" + ch.text + ")"
-                                inViewCombo.visible =! inViewCombo.visible
-
                                 tSys.setDay(model.index);
 
-                                inViewCombo.currentIndex = model.index
-
-                                if(inViewCombo.currentIndex == 0){
-                                    prevDateEnd();
-                                }else{
-                                    notEnd();
-                                }
+                                setIndex(model.index);
                             }
                         }
 
                         border.width: inViewCombo.currentIndex == model.index ? 5 : indexTodayDay === model.index ? 3 : 1
                         border.color: indexTodayDay === model.index ? "#18bc9c" : "#5c6ea0"
+                        radius: 10
                     }
 
                     Rectangle{
@@ -214,7 +307,7 @@ Rectangle {
 
                         width: (parent.width - delegDayField.width) / 2
 
-                        color: parent.color
+                        color: "#2c3e50"
 
                         Text{
                             id: twoTextField
@@ -232,25 +325,15 @@ Rectangle {
                             anchors.fill: parent
 
                             onClicked: {
-                                //console.log(model.index);
-                                //view.currentIndex = model.index
-                                //dayField.text = model.text + " (" + zn.text + ")"
-                                inViewCombo.visible =! inViewCombo.visible
-
                                 tSys.setDay(model.index + 7);
 
-                                inViewCombo.currentIndex = model.index + 6
-
-                                if(inViewCombo.currentIndex == 11){
-                                    nextDateEnd();
-                                }else{
-                                    notEnd();
-                                }
+                                setIndex(model.index + 6);
                             }
                         }
 
                         border.width: inViewCombo.currentIndex == model.index + 6 ? 5 : 1
                         border.color: "#5c6ea0"
+                        radius: 10
                     }
                 }
             }
