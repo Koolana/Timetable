@@ -13,6 +13,8 @@ Rectangle {
     property int indexTodayDay: 0
     property bool isCh: true
 
+    property int animationDuration: 250
+
     signal nextDateEnd();
     signal prevDateEnd();
     signal notEnd();
@@ -70,7 +72,7 @@ Rectangle {
     HamburgerMenu {
         id: timeField
 
-        animationDuration: 500
+        animationDuration: animationDuration
 
         anchors.leftMargin: 10
 
@@ -113,7 +115,7 @@ Rectangle {
         transitions: [
             Transition {
                 PropertyAnimation { target: bckButton; properties: "visible, anchors.rightMargin";
-                    duration: 500; easing.type: Easing.InOutQuad }
+                    duration: animationDuration; easing.type: Easing.InOutQuad }
             }
         ]
 
@@ -251,7 +253,7 @@ Rectangle {
                 transitions: [
                     Transition {
                         PropertyAnimation { target: inViewCombo; properties: "anchors.topMargin";
-                            duration: 500; easing.type: Easing.InOutQuad }
+                            duration: animationDuration; easing.type: Easing.InOutQuad }
                     }
                 ]
 

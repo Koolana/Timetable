@@ -4,6 +4,9 @@ import QtQuick.Shapes 1.13
 
 Item {
     id: lrButtons
+
+    property int animationDuration: 150
+
     signal nextDate();
     signal prevDate();
 
@@ -51,16 +54,13 @@ Item {
             State {
                 name: "off"
                 PropertyChanges { target: leftBut; z: -1 }
-                PropertyChanges { target: leftBut; visible: false }
             }
         ]
 
         transitions: [
             Transition {
                 PropertyAnimation { target: leftBut; properties: "width";
-                    duration: 500; easing.type: Easing.InOutQuad }
-                PropertyAnimation { target: leftBut; properties: "visible";
-                    duration: 250; easing.type: Easing.InOutQuad }
+                    duration: animationDuration; easing.type: Easing.InOutQuad }
             }
         ]
 
@@ -159,16 +159,15 @@ Item {
             State {
                 name: "off"
                 PropertyChanges { target: rightBut; z: -1 }
-                PropertyChanges { target: rightBut; visible: false }
             }
         ]
 
         transitions: [
             Transition {
                 PropertyAnimation { target: rightBut; properties: "width";
-                    duration: 500; easing.type: Easing.InOutQuad }
-                PropertyAnimation { target: rightBut; properties: "visible";
-                    duration: 250; easing.type: Easing.InOutQuad }
+                    duration: animationDuration; easing.type: Easing.InOutQuad }
+                PropertyAnimation { target: rightBut; properties: "z";
+                    duration: animationDuration; easing.type: Easing.InOutQuad }
             }
         ]
 
