@@ -40,9 +40,10 @@ Rectangle {
 
         if(ind == indexTodayDay)
         {
-            bckButton.visible = false
+            //bckButton.visible = false
+            bckButton.state = "off"
         }else{
-            bckButton.visible = true
+            bckButton.state = "on"
         }
 
         offComboBox();
@@ -53,7 +54,7 @@ Rectangle {
     }
 
     function offComboBox(){
-        inViewCombo.visible = false;
+        inViewCombo.state = "off"
     }
 
     function nextDate(){
@@ -66,17 +67,19 @@ Rectangle {
 
     color: "#2c3e50"
 
-    Text {
+    HamburgerMenu {
         id: timeField
+
+        animationDuration: 500
 
         anchors.leftMargin: 10
 
-        text: currentTime
+//        text: currentTime
 
         anchors.left: parent.left
         anchors.verticalCenter: parent.verticalCenter
 
-        color: "#ffffff"
+//        color: "#ffffff"
     }
 
 
@@ -87,7 +90,7 @@ Rectangle {
         anchors.right: parent.right
         anchors.top: parent.top
         anchors.bottom: parent.bottom
-        anchors.rightMargin: 10
+        anchors.rightMargin: parent.width / 2
 
         color: "#2c3e50"
 
@@ -95,28 +98,24 @@ Rectangle {
         border.color: "#18bc9c"
         radius: 10
 
-//        Shape {
-//            width: parent.width
-//            height: parent.height
+        state: "off"
+        states: [
+            State {
+                name: "off"
+            },
 
-//            anchors.left: parent.left
-//            anchors.verticalCenter: parent.verticalCenter
+            State {
+                name: "on"
+                PropertyChanges { target: bckButton; anchors.rightMargin: 10 }
+            }
+        ]
 
-//            ShapePath {
-//                //ashPattern: [ 1, 4 ]
-//                fillColor: bckButton.color
-//                strokeWidth: 3
-//                strokeColor: "#ffffff"
-
-//                capStyle: ShapePath.RoundCap
-//                joinStyle: ShapePath.RoundJoin
-
-//                startX: 20 + 10; startY: bckButton.height / 2 - 15
-//                PathLine { x: 20 + 10; y: bckButton.height / 2 - 15 }
-//                PathLine { x: 20 - 15; y: bckButton.height / 2 }
-//                PathLine { x: 20 + 10; y: bckButton.height / 2 + 15 }
-//            }
-//        }
+        transitions: [
+            Transition {
+                PropertyAnimation { target: bckButton; properties: "visible, anchors.rightMargin";
+                    duration: 500; easing.type: Easing.InOutQuad }
+            }
+        ]
 
         Text{
             width: parent.width
@@ -219,7 +218,7 @@ Rectangle {
 
                 onClicked: {
                     //console.log("clc");
-                    inViewCombo.visible =! inViewCombo.visible
+                    inViewCombo.state = inViewCombo.state == "off" ? "on" : "off"
                 }
             }
 
@@ -228,10 +227,33 @@ Rectangle {
 
                 currentIndex: indexTodayDay;
 
-                visible: false
+                visible: true
                 height: comboEl.height * dataModel.count
                 anchors.top: parent.bottom
                 model: dataModel
+
+                anchors.topMargin: -comboEl.height * dataModel.count
+
+                z: -1
+
+                state: "off"
+                states: [
+                    State {
+                        name: "off"
+                    },
+
+                    State {
+                        name: "on"
+                        PropertyChanges { target: inViewCombo; anchors.topMargin: 0 }
+                    }
+                ]
+
+                transitions: [
+                    Transition {
+                        PropertyAnimation { target: inViewCombo; properties: "anchors.topMargin";
+                            duration: 500; easing.type: Easing.InOutQuad }
+                    }
+                ]
 
                 delegate: Rectangle {
                     width: comboEl.width

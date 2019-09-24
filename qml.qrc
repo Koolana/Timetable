@@ -5,5 +5,6 @@
         <file>HeaderView.qml</file>
         <file>LeftRightControlPanel.qml</file>
         <file>BackButton.qml</file>
+        <file>HamburgerMenu.qml</file>
     </qresource>
 </RCC>

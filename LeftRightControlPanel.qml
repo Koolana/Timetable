@@ -8,35 +8,21 @@ Item {
     signal prevDate();
 
     function offNextDay(){
-        leftBut.anchors.right = lrButtons.right
-        leftBut.width = lrButtons.width
-
-        rightBut.visible = false;
-        unlockPrevDay();
+        leftBut.state = "big"
+        rightBut.state = "off"
     }
 
     function offPrevDay(){
-        rightBut.anchors.left = lrButtons.left
-        rightBut.width = lrButtons.width
-
-        rightBut.anchors.leftMargin = 0
-
-        leftBut.visible = false;
-        unlockNextDay();
+        leftBut.state = "off"
+        rightBut.state = "big"
     }
 
     function unlockNextDay(){
-        leftBut.anchors.right = undefined
-        leftBut.width = lrButtons.width / 2 - 5
-
-        rightBut.visible = true;
+        rightBut.state = "normal"
     }
 
     function unlockPrevDay(){
-        rightBut.anchors.left = undefined
-        rightBut.width = lrButtons.width/2 - 5
-
-        leftBut.visible = true;
+        leftBut.state = "normal"
     }
 
     Rectangle{
@@ -49,6 +35,34 @@ Item {
         anchors.bottom: parent.bottom
         anchors.left: parent.left
         //anchors.right: parent.right
+
+        state: "normal"
+        states: [
+            State {
+                name: "normal"
+                PropertyChanges { target: leftBut; width: parent.width/2 - 5 }
+            },
+
+            State {
+                name: "big"
+                PropertyChanges { target: leftBut; width: parent.width }
+            },
+
+            State {
+                name: "off"
+                PropertyChanges { target: leftBut; z: -1 }
+                PropertyChanges { target: leftBut; visible: false }
+            }
+        ]
+
+        transitions: [
+            Transition {
+                PropertyAnimation { target: leftBut; properties: "width";
+                    duration: 500; easing.type: Easing.InOutQuad }
+                PropertyAnimation { target: leftBut; properties: "visible";
+                    duration: 250; easing.type: Easing.InOutQuad }
+            }
+        ]
 
         color: "White"
 
@@ -112,8 +126,6 @@ Item {
             onClicked: {
                 tSys.prevDay();
                 lrButtons.prevDate();
-
-                unlockNextDay();
             }
         }
     }
@@ -121,9 +133,9 @@ Item {
     Rectangle{
         id: rightBut
 
+        width: parent.width/2 - 5;
         radius: parent.width/4;
 
-        anchors.left: leftBut.right
         anchors.top: parent.top
         anchors.bottom: parent.bottom
         anchors.right: parent.right
@@ -131,6 +143,34 @@ Item {
         anchors.leftMargin: 10
 
         color: "White"
+
+        state: "normal"
+        states: [
+            State {
+                name: "normal"
+                PropertyChanges { target: rightBut; width: parent.width/2 - 5 }
+            },
+
+            State {
+                name: "big"
+                PropertyChanges { target: rightBut; width: parent.width }
+            },
+
+            State {
+                name: "off"
+                PropertyChanges { target: rightBut; z: -1 }
+                PropertyChanges { target: rightBut; visible: false }
+            }
+        ]
+
+        transitions: [
+            Transition {
+                PropertyAnimation { target: rightBut; properties: "width";
+                    duration: 500; easing.type: Easing.InOutQuad }
+                PropertyAnimation { target: rightBut; properties: "visible";
+                    duration: 250; easing.type: Easing.InOutQuad }
+            }
+        ]
 
 //        Text{
 //            anchors.fill: parent
@@ -192,8 +232,6 @@ Item {
             onClicked: {
                 tSys.nextDay();
                 lrButtons.nextDate();
-
-                unlockPrevDay();
             }
         }
     }

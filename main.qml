@@ -37,9 +37,9 @@ Window {
             header.isCh = isCh
             header.indexTodayDay = indexTodayDay - 1
 
-            if(indexTodayDay == 1){
-                lrButtons.offPrevDay();
-            }
+//            if(indexTodayDay == 1){
+//                lrButtons.offPrevDay();
+//            }
 
             header.setTodayIndex();
         }
