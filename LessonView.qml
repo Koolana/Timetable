@@ -1,4 +1,4 @@
-import QtQuick 2.0
+import QtQuick 2.12
 
 Rectangle {
     property string timeFieldText: "";
@@ -6,9 +6,9 @@ Rectangle {
     property string nameFieldText: "";
     property string cabFieldText: "";
 
-    width: parent.width
-    height: 100
-    color: "lightblue"
+    property string backColor: "";
+
+    radius: 10
 
     Text {
         id: timeField
@@ -20,6 +20,7 @@ Rectangle {
         anchors.verticalCenter: parent.verticalCenter
         anchors.leftMargin: 0
 
+        color: "#ffffff"
         text: timeFieldText
     }
 
@@ -33,12 +34,13 @@ Rectangle {
         anchors.verticalCenter: parent.verticalCenter
         anchors.leftMargin: 0
 
+        color: "#ffffff"
         text: typeFieldText
     }
 
     Text {
         id: nameField
-        width: 200
+        width: parent.width-200
         anchors.left: typeField.right
         anchors.right: cabField.left
         renderType: Text.NativeRendering
@@ -47,6 +49,7 @@ Rectangle {
 
         anchors.centerIn: parent
 
+        color: "#ffffff"
         text: nameFieldText
     }
 
@@ -60,6 +63,23 @@ Rectangle {
         anchors.verticalCenter: parent.verticalCenter
         anchors.rightMargin: 20
 
+        color: "#ffffff"
         text: cabFieldText
+    }
+
+    Rectangle {
+        id: backEl
+        color: backColor
+
+        width: parent.width + 20
+        height: parent.height
+        anchors.leftMargin: - 10
+
+        smooth: true
+
+        z: -1
+        opacity: 0.7
+        anchors.left: parent.left
+        anchors.top: parent.top
     }
 }

@@ -1,34 +1,58 @@
 import QtQuick 2.12
 import QtQuick.Window 2.12
 
+//import "qrc:/" //в винде это надо комментить //линухе !//
+
 Window {
     //visibility: "FullScreen"
     visible: true
 
-    width: 640
-    height: 480
-    title: qsTr("Hello World")
-
-    Loader {
-        source:"LessonView.qml";
-    }
+    width: 450
+    height: 800
+    title: qsTr("Timetable")
 
     Connections {
-        target: fSys // Указываем целевое соединение
-        /* Объявляем и реализуем функцию, как параметр
-         * объекта и с имененем похожим на название сигнала
-         * Разница в том, что добавляем в начале on и далее пишем
-         * с заглавной буквы
-         * */
+        target: fSys
+
+//        onSendCurrentLessonToQml:{
+//            view.currentIndex = num;
+//        }
+
         onSendOneLessonToQml: {
             dataModel.append({
                 timeText: time,
                 typeText: type,
                 nameText: name,
                 cabText: cab,
-                lecturerText: lecturer
+                lecturerText: lecturer,
+                color: isCur ? "#18bc9c" : "#ffffff",
             });
-            //buttonText.text = textField // Устанавливаем счётчик в текстовый лейбл
+        }
+    }
+
+    Connections {
+        target: tSys
+
+        onSendFirstInitToQml: {
+            header.isCh = isCh
+            header.indexTodayDay = indexTodayDay - 1
+
+//            if(indexTodayDay == 1){
+//                lrButtons.offPrevDay();
+//            }
+
+            header.setTodayIndex();
+        }
+
+        onSendCurrentTimeToQml: {
+            header.currentTime = time
+        }
+
+        onSendDayAndWeekTypeToQml: {
+            header.currentDay = day
+            header.currentWeek = weekType
+            header.currentDate = date
+            dataModel.clear()
         }
     }
 
@@ -56,50 +80,119 @@ Window {
             model: dataModel
 
             delegate: LessonView {
+                id: lessonView
+                width: parent.width
+                height: 120
+
+                color: {
+                    if( model.typeText === "(лек)"){
+                        "#18bc9c";
+                    }else{
+                        if( model.typeText === "(сем)")
+                        {
+                            "#3498db"
+                        }else{
+                            "#dddddd"
+                        }
+                    }
+                }
+                //border.color: model.color
+                backColor: model.color
+
                 timeFieldText: model.timeText
                 typeFieldText: model.typeText
                 nameFieldText: model.nameText
                 cabFieldText: model.cabText
+
+                MouseArea {//выделение объекта ListView при нажатии
+                    anchors.fill: parent
+
+                    onClicked: {
+                        header.offComboBox();
+                        //view.currentIndex = index;
+                    }
+
+                    onPressed: {
+                        header.offComboBox();
+                    }
+                }
             }
         }
-//        Очистить поле ListView по нажатию этой кнопки
-//        Rectangle {
-//            id: button
-
-//            width: 100
-//            height: 40
-//            anchors.horizontalCenter: parent.horizontalCenter
-//            anchors.bottom: parent.bottom
-//            border {
-//                color: "black"
-//                width: 1
-//            }
-
-//            Text {
-//                id: buttonText
-//                anchors.centerIn: parent
-//                renderType: Text.NativeRendering
-//                text: "Clear"
-//            }
-
-//            MouseArea {
-//                anchors.fill: parent
-//                //onClicked: dataModel.append({})
-//                onClicked: {
-//                    dataModel.clear()
-//                }
-//            }
-//        }
     }
 
-
-    Rectangle{
+    HeaderView{
         id: header
+
         width: parent.width
         height: 50
 
         anchors.top: parent.top
 
-        color: "green"
+        currentTime: "--:--"
+        currentDay: "--"
+        currentWeek: "--"
+        currentDate: "--"
+
+        onNextDateEnd: {
+            lrButtons.offNextDay();
+        }
+
+        onPrevDateEnd: {
+            lrButtons.offPrevDay();
+        }
+
+        onNotEnd: {
+            lrButtons.unlockNextDay();
+            lrButtons.unlockPrevDay();
+        }
+    }
+
+//    BackButton{
+//        id: bckButton
+
+//        anchors.right: parent.right
+//        anchors.bottom: lrButtons.top
+//        anchors.rightMargin: 10
+//        anchors.bottomMargin: 10
+
+//        height: 70
+//        width: 70
+
+//        indexTodayDay: header.indexTodayDay
+
+//        onPrevDateEnd: {
+//            lrButtons.offPrevDay();
+
+//            header.setTodayIndex();
+//            header.offComboBox();
+//        }
+
+//        onNotEnd: {
+//            lrButtons.unlockNextDay();
+//            lrButtons.unlockPrevDay();
+
+//            header.setTodayIndex();
+//            header.offComboBox();
+//        }
+//    }
+
+    LeftRightControlPanel{
+        id: lrButtons
+
+        anchors.right: parent.right
+        anchors.bottom: parent.bottom
+        anchors.rightMargin: 10
+        anchors.bottomMargin: 10
+
+        height: 70
+        width: 150
+
+        onNextDate: {
+            header.nextDate();
+        }
+
+        onPrevDate: {
+            header.prevDate();
+        }
     }
 }
