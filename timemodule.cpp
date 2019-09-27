@@ -56,7 +56,7 @@ void TimeModule::nextDay()
     dayName[0] = dayName[0].toUpper();//повтор
 
     emit sendDayAndWeekTypeToQml(dayName, weekType ? "ЗН" : "ЧС", nowDate.date().toString("dd.MM.yy"));
-    emit setTimeFilter(dayNumber, weekType ? 1 : 0);
+    //emit setTimeFilter(dayNumber, weekType ? 1 : 0);
 }
 
 void TimeModule::prevDay()
@@ -75,7 +75,7 @@ void TimeModule::prevDay()
     dayName[0] = dayName[0].toUpper();//повтор
 
     emit sendDayAndWeekTypeToQml(dayName, weekType ? "ЗН" : "ЧС", nowDate.date().toString("dd.MM.yy"));
-    emit setTimeFilter(dayNumber, weekType ? 1 : 0);
+    //emit setTimeFilter(dayNumber, weekType ? 1 : 0);
 }
 
 int TimeModule::getCurrentWeekType(QDateTime nowInDate){
@@ -109,6 +109,6 @@ void TimeModule::setDay(int dayChZn)//int dayChZn - номер нажатой к
     dayName[0] = dayName[0].toUpper();//повтор
 
     emit sendDayAndWeekTypeToQml(dayName, weekType ? "ЗН" : "ЧС", nowDate.date().toString("dd.MM.yy"));
-    emit setTimeFilter(dayNumber, weekType ? 1 : 0);
+    //emit setTimeFilter(dayNumber, weekType ? 1 : 0);
 }
 

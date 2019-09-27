@@ -12,6 +12,11 @@ FilteringSystem::FilteringSystem(QList<DayData*> inputWeek, QObject *parent) : Q
 
 void FilteringSystem::init()
 {
+    setCurrentWeek();
+}
+
+void FilteringSystem::sendDayFilterDataToQml()
+{
     for(auto day: filteringWeek)
     {
         for(auto lesson: day->lessons)
@@ -27,10 +32,20 @@ void FilteringSystem::init()
                                     isCurrentDay? isCurrentLesson(lesson) : false);
 
         }
+
+        emit finishSendDay();
     }
 }
 
-void FilteringSystem::setTimeFilter(int day, int weekType)
+void FilteringSystem::setCurrentWeek()
+{
+    for(int i = 0; i < 12; i++)
+    {
+        createDay(i % 6 + 1, i / 6);
+    }
+}
+
+void FilteringSystem::createDay(int day, int weekType)
 {
     filteringWeek.clear();
 
@@ -47,7 +62,12 @@ void FilteringSystem::setTimeFilter(int day, int weekType)
 
     filteringWeek.append(newDay);
     //qDebug() << filteringWeek.at(0)->lessons.at(0)->timeStart->hour();
-    init();
+    sendDayFilterDataToQml();
+}
+
+void FilteringSystem::setTimeFilter(int day, int weekType)
+{
+    emit setDayByNum(day - 1/* + weekType * 6*/);
 }
 
 //void FilteringSystem::setCurrentLesson()

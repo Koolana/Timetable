@@ -124,7 +124,7 @@ Item {
             anchors.fill: parent
 
             onClicked: {
-                tSys.prevDay();
+                //tSys.prevDay();
                 lrButtons.prevDate();
             }
         }
@@ -229,7 +229,7 @@ Item {
             anchors.fill: parent
 
             onClicked: {
-                tSys.nextDay();
+                //tSys.nextDay();
                 lrButtons.nextDate();
             }
         }

@@ -38,7 +38,7 @@ int main(int argc, char *argv[])
 
     engine.load(url);
 
-    //fSys->init();
+    fSys->init();
     tSys->init();
 
     return app.exec();

@@ -16,9 +16,15 @@ public:
 signals:
     void sendOneLessonToQml(QString time, QString type, QString name, QString cab, QString lecturer, bool isCur);
     void sendCurrentLessonToQml(int num);
+    //void sendAllWeekDataToQml(QList<QVariant>);
+    void finishSendDay();
+    void setDayByNum(int num);
 
 public slots:
     void setTimeFilter(int day, int weekType);
+    void createDay(int day, int weekType);
+    void sendDayFilterDataToQml();
+    void setCurrentWeek();
 //    void setCurrentLesson();
 
 private:

@@ -1,5 +1,6 @@
 import QtQuick 2.12
 import QtQuick.Window 2.12
+import QtQuick.Controls 2.5
 
 //import "qrc:/" //в винде это надо комментить //линухе !//
 
@@ -18,7 +19,16 @@ Window {
 //            view.currentIndex = num;
 //        }
 
-        onSendOneLessonToQml: {
+        onSetDayByNum: {
+            mainView.currentIndex = num
+        }
+
+        onFinishSendDay: {
+            mainView.addPage(mainView.createPage())
+            dataModel.clear();
+        }
+
+        onSendOneLessonToQml: {//сделать сигнла символизирующий о конце передачи списка или передвавть сам список
             dataModel.append({
                 timeText: time,
                 typeText: type,
@@ -37,10 +47,6 @@ Window {
             header.isCh = isCh
             header.indexTodayDay = indexTodayDay - 1
 
-//            if(indexTodayDay == 1){
-//                lrButtons.offPrevDay();
-//            }
-
             header.setTodayIndex();
         }
 
@@ -52,7 +58,8 @@ Window {
             header.currentDay = day
             header.currentWeek = weekType
             header.currentDate = date
-            dataModel.clear()
+//            dataModel.clear()
+            //console.log("change");
         }
     }
 
@@ -60,7 +67,11 @@ Window {
         id: dataModel
     }
 
-    Column{
+    SwipeView{
+        id: mainView
+        property int curIndexWitouthZero: 0//хз зачем
+        property int flag: 0
+
         anchors.topMargin: 10
         anchors.leftMargin: 10
         anchors.rightMargin: 10
@@ -72,52 +83,62 @@ Window {
 
         spacing: 10
 
-        ListView {
-            id: view
+//        Component.onCompleted: {//хз зачем
+//            curIndexWitouthZero = mainView.currentIndex
+//            curIndexWitouthZero += 1
+//            addPage(createPage())
+//        }
 
-            anchors.fill: parent
-            spacing: 10
-            model: dataModel
-
-            delegate: LessonView {
-                id: lessonView
-                width: parent.width
-                height: 120
-
-                color: {
-                    if( model.typeText === "(лек)"){
-                        "#18bc9c";
-                    }else{
-                        if( model.typeText === "(сем)")
-                        {
-                            "#3498db"
-                        }else{
-                            "#dddddd"
-                        }
-                    }
-                }
-                //border.color: model.color
-                backColor: model.color
-
-                timeFieldText: model.timeText
-                typeFieldText: model.typeText
-                nameFieldText: model.nameText
-                cabFieldText: model.cabText
-
-                MouseArea {//выделение объекта ListView при нажатии
-                    anchors.fill: parent
-
-                    onClicked: {
-                        header.offComboBox();
-                        //view.currentIndex = index;
-                    }
-
-                    onPressed: {
-                        header.offComboBox();
-                    }
+        onCurrentIndexChanged: {
+            //console.log(curIndexWitouthZero - mainView.currentIndex);
+            if(curIndexWitouthZero - mainView.currentIndex < 0 && flag > 1){
+                tSys.nextDay();
+                //console.log("next")
+            }else{
+                if(curIndexWitouthZero - mainView.currentIndex > 0 && flag > 1){
+                    tSys.prevDay();
+                    //console.log("prev")
                 }
             }
+
+            curIndexWitouthZero = mainView.currentIndex
+            flag++;
+            header.setIndex(mainView.currentIndex);
         }
+
+//        onCurrentIndexChanged: {
+//            console.log("");
+//        }
+
+        function addPage(page) {
+            for(var i = 0; i < dataModel.count; i++)
+            {
+                page.addLessonToView(dataModel.get(i));
+            }
+            addItem(page)
+            page.visible = true
+        }
+
+        function createPage(){
+            var component = Qt.createComponent("ListLessonView.qml");
+            var page = component.createObject(mainView, {});
+            return page
+        }
+
+//        Item{
+//            ListLessonView{
+//                id: first
+////                model: dataModel
+
+//                MouseArea{
+//                    anchors.fill: parent
+
+//                    onPressed: {
+//                        header.offComboBox();
+//                    }
+//                }
+//            }
+//        }
     }
 
     HeaderView{
@@ -144,6 +165,12 @@ Window {
         onNotEnd: {
             lrButtons.unlockNextDay();
             lrButtons.unlockPrevDay();
+        }
+
+        onChangeDate: {
+            mainView.flag = 1;
+            mainView.currentIndex = num;
+            //console.log(num)
         }
     }
 
@@ -188,11 +215,21 @@ Window {
         width: 150
 
         onNextDate: {
-            header.nextDate();
+            //header.nextDate();
+            //tSys.nextDay();
+            //view.state = "2"
+            //view.state = "1"
+            mainView.currentIndex++;
+            mainView.curIndexWitouthZero = mainView.currentIndex;
+            //console.log(mainView.currentIndex)
         }
 
         onPrevDate: {
-            header.prevDate();
+            //header.prevDate();
+            //tSys.prevDay();
+            mainView.currentIndex--;
+            mainView.curIndexWitouthZero = mainView.currentIndex;
+            //console.log(mainView.currentIndex)
         }
     }
 }

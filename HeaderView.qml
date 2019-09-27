@@ -18,6 +18,7 @@ Rectangle {
     signal nextDateEnd();
     signal prevDateEnd();
     signal notEnd();
+    signal changeDate(int num);
 
     function setIndex(ind){
         inViewCombo.currentIndex = ind;
@@ -138,6 +139,7 @@ Rectangle {
 
             onClicked: {
                 tSys.setDay(indexTodayDay);
+                changeDate(indexTodayDay);
 
                 if(indexTodayDay == 0){
                     prevDateEnd();
@@ -314,6 +316,7 @@ Rectangle {
 
                             onClicked: {
                                 tSys.setDay(model.index);
+                                changeDate(model.index);
 
                                 setIndex(model.index);
                             }
@@ -350,6 +353,7 @@ Rectangle {
 
                             onClicked: {
                                 tSys.setDay(model.index + 7);
+                                changeDate(model.index + 6);
 
                                 setIndex(model.index + 6);
                             }
