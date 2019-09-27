@@ -12,6 +12,8 @@ Window {
     height: 800
     title: qsTr("Timetable")
 
+    color: "#5c6ea0"
+
     Connections {
         target: fSys
 
@@ -35,7 +37,7 @@ Window {
                 nameText: name,
                 cabText: cab,
                 lecturerText: lecturer,
-                color: isCur ? "#18bc9c" : "#ffffff",
+                color: isCur ? "#18bc9c" : "#5c6ea0"/*"#ffffff"*/,
             });
         }
     }
@@ -81,7 +83,25 @@ Window {
         anchors.left: parent.left
         anchors.bottom: parent.bottom
 
-        spacing: 10
+        spacing: 20
+
+        contentItem: ListView {
+            model: mainView.contentModel
+            interactive: mainView.interactive
+            currentIndex: mainView.currentIndex
+
+            spacing: mainView.spacing
+            orientation: mainView.orientation
+            snapMode: ListView.SnapOneItem
+            boundsBehavior: Flickable.StopAtBounds
+
+            highlightRangeMode: ListView.StrictlyEnforceRange
+            preferredHighlightBegin: 0
+            preferredHighlightEnd: 0
+            highlightMoveDuration: 250
+
+            maximumFlickVelocity: 10 * (mainView.orientation === /*//10 - скорость анимации листания*/Qt.Horizontal ? width : height)
+        }
 
 //        Component.onCompleted: {//хз зачем
 //            curIndexWitouthZero = mainView.currentIndex

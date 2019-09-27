@@ -78,7 +78,7 @@ Rectangle {
         smooth: true
 
         z: -1
-        opacity: 0.7
+        opacity: 1/*0.7*/
         anchors.left: parent.left
         anchors.top: parent.top
     }

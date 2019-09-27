@@ -41,7 +41,7 @@ void FilteringSystem::setCurrentWeek()
 {
     for(int i = 0; i < 12; i++)
     {
-        createDay(i % 6 + 1, i / 6);
+        createDay(i % 6 + 1, abs(i / 6 - TimeModule::getCurrentWeekType(QDateTime::currentDateTime())));
     }
 }
 

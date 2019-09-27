@@ -29,7 +29,8 @@ Item{
                     {
                         "#3498db"
                     }else{
-                        "#dddddd"
+//                        "#dddddd"
+                        "#6c7eb0"
                     }
                 }
             }
