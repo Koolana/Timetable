@@ -131,31 +131,9 @@ void PageReader::downloadAndReadPage(QString addr)
                 }
 
                 week.append(thisDay);
-                //list->append(node.outerHtml());
             }
         }
-
-//        for(auto tmp: *list){
-//            testTextBox->insertHtml(tmp);
-//        }
-
-//        for(auto weekDay: week)
-//        {
-//            qDebug() << weekDay.name;
-
-//            for(int i = 0; i < weekDay.doubleClasses.count(); i++)
-//            {
-//                qDebug() << "  " << weekDay.doubleClasses.at(i).NumeratorDenumerataor << " "
-//                         << weekDay.doubleClasses.at(i).time << " "
-//                         << weekDay.doubleClasses.at(i).classType
-//                         << weekDay.doubleClasses.at(i).className << " "
-//                         << weekDay.doubleClasses.at(i).classCab << " "
-//                         << weekDay.doubleClasses.at(i).classLecturer;
-//            }
-//        }
     }
-//    else // вывод ошибки
-//        testTextBox->setPlainText(reply->errorString());
     reply->deleteLater();
 }
 

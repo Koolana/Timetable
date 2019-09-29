@@ -5,6 +5,16 @@
 #include <QString>
 #include <QTime>
 
+struct LabWork{
+    QDate date;
+    QTime* timeStart;
+    QTime* timeEnd;
+
+    QString lessonName;
+    QString lessonCab;
+    QString lessonLecturer;
+};
+
 struct Lesson{
     int NumeratorDenumerataor;
     QTime* timeStart;

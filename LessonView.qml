@@ -6,7 +6,12 @@ Rectangle {
     property string nameFieldText: "";
     property string cabFieldText: "";
 
-    property string backColor: "";
+    property string colorFont: "#ffffff";
+    property string colorType0: "#2c3e50";
+    property string colorType1: "#18bc9c";
+    property string colorType2: "#3498db";
+    property string colorType3: "#ca0318"//"#6c7eb0";
+    property string colorType4: "#888888";
 
     radius: 10
 
@@ -20,7 +25,7 @@ Rectangle {
         anchors.verticalCenter: parent.verticalCenter
         anchors.leftMargin: 0
 
-        color: "#ffffff"
+        color: colorFont
         text: timeFieldText
     }
 
@@ -34,22 +39,24 @@ Rectangle {
         anchors.verticalCenter: parent.verticalCenter
         anchors.leftMargin: 0
 
-        color: "#ffffff"
+        color: colorFont
         text: typeFieldText
     }
 
     Text {
         id: nameField
-        width: parent.width-200
+        //width: parent.width-220
+        anchors.rightMargin: 10
+        anchors.leftMargin: 10
         anchors.left: typeField.right
         anchors.right: cabField.left
         renderType: Text.NativeRendering
         wrapMode: Text.WordWrap
         horizontalAlignment: Text.AlignHCenter
 
-        anchors.centerIn: parent
+        anchors.verticalCenter: parent.verticalCenter
 
-        color: "#ffffff"
+        color: colorFont
         text: nameFieldText
     }
 
@@ -61,25 +68,9 @@ Rectangle {
 
         anchors.right: parent.right
         anchors.verticalCenter: parent.verticalCenter
-        anchors.rightMargin: 20
+        anchors.rightMargin: 10
 
-        color: "#ffffff"
+        color: colorFont
         text: cabFieldText
-    }
-
-    Rectangle {
-        id: backEl
-        color: backColor
-
-        width: parent.width + 20
-        height: parent.height
-        anchors.leftMargin: - 10
-
-        smooth: true
-
-        z: -1
-        opacity: 1/*0.7*/
-        anchors.left: parent.left
-        anchors.top: parent.top
     }
 }

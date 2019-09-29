@@ -5,6 +5,14 @@ import QtQuick.Controls 2.5
 //import "qrc:/" //в винде это надо комментить //линухе !//
 
 Window {
+    id: appWindow
+
+    property string colorFont: "#ffffff";
+    property string colorType0: "#2c3e50";
+    property string colorType1: "#18bc9c";
+    property string colorType2: "#3498db";
+    property string colorType3: "#6c7eb0";
+    property string colorType4: "#888888";
     //visibility: "FullScreen"
     visible: true
 
@@ -12,56 +20,40 @@ Window {
     height: 800
     title: qsTr("Timetable")
 
-    color: "#5c6ea0"
+    color: colorType0
 
     Connections {
-        target: fSys
+        target: Controller
 
-//        onSendCurrentLessonToQml:{
-//            view.currentIndex = num;
-//        }
-
-        onSetDayByNum: {
-            mainView.currentIndex = num
-        }
-
-        onFinishSendDay: {
+        onFinishSendDayToQml: {
             mainView.addPage(mainView.createPage())
             dataModel.clear();
         }
 
-        onSendOneLessonToQml: {//сделать сигнла символизирующий о конце передачи списка или передвавть сам список
+        onSendOneLessonToQml: {
             dataModel.append({
-                timeText: time,
-                typeText: type,
-                nameText: name,
-                cabText: cab,
-                lecturerText: lecturer,
-                color: isCur ? "#18bc9c" : "#5c6ea0"/*"#ffffff"*/,
-            });
+                                 timeText: time,
+                                 typeText: type,
+                                 nameText: name,
+                                 cabText: cab,
+                                 lecturerText: lecturer,
+                             });
         }
-    }
 
-    Connections {
-        target: tSys
+        onSendDayNumberToQml: {
+            //console.log(num);
+            header.indexTodayDay = num
+            mainView.currentIndex = num
+            //header.reDrawTextFields();
+            header.setIndex(num);
+        }
 
-        onSendFirstInitToQml: {
+        onSendDateToQml: {
+            header.addDateToList(date)
+        }
+
+        onSendWeekTypeToQml: {
             header.isCh = isCh
-            header.indexTodayDay = indexTodayDay - 1
-
-            header.setTodayIndex();
-        }
-
-        onSendCurrentTimeToQml: {
-            header.currentTime = time
-        }
-
-        onSendDayAndWeekTypeToQml: {
-            header.currentDay = day
-            header.currentWeek = weekType
-            header.currentDate = date
-//            dataModel.clear()
-            //console.log("change");
         }
     }
 
@@ -71,8 +63,8 @@ Window {
 
     SwipeView{
         id: mainView
-        property int curIndexWitouthZero: 0//хз зачем
-        property int flag: 0
+//        property int curIndexWitouthZero: 0
+//        property int flag: 0
 
         anchors.topMargin: 10
         anchors.leftMargin: 10
@@ -103,32 +95,19 @@ Window {
             maximumFlickVelocity: 10 * (mainView.orientation === /*//10 - скорость анимации листания*/Qt.Horizontal ? width : height)
         }
 
-//        Component.onCompleted: {//хз зачем
-//            curIndexWitouthZero = mainView.currentIndex
-//            curIndexWitouthZero += 1
-//            addPage(createPage())
-//        }
-
         onCurrentIndexChanged: {
-            //console.log(curIndexWitouthZero - mainView.currentIndex);
-            if(curIndexWitouthZero - mainView.currentIndex < 0 && flag > 1){
-                tSys.nextDay();
-                //console.log("next")
-            }else{
-                if(curIndexWitouthZero - mainView.currentIndex > 0 && flag > 1){
-                    tSys.prevDay();
-                    //console.log("prev")
-                }
-            }
+//            if(curIndexWitouthZero - mainView.currentIndex < 0 && flag > 1){
+//                //console.log("next")
+//            }else{
+//                if(curIndexWitouthZero - mainView.currentIndex > 0 && flag > 1){
+//                    //console.log("prev")
+//                }
+//            }
 
-            curIndexWitouthZero = mainView.currentIndex
-            flag++;
+//            curIndexWitouthZero = mainView.currentIndex
+//            flag++;
             header.setIndex(mainView.currentIndex);
         }
-
-//        onCurrentIndexChanged: {
-//            console.log("");
-//        }
 
         function addPage(page) {
             for(var i = 0; i < dataModel.count; i++)
@@ -144,32 +123,17 @@ Window {
             var page = component.createObject(mainView, {});
             return page
         }
-
-//        Item{
-//            ListLessonView{
-//                id: first
-////                model: dataModel
-
-//                MouseArea{
-//                    anchors.fill: parent
-
-//                    onPressed: {
-//                        header.offComboBox();
-//                    }
-//                }
-//            }
-//        }
     }
 
     HeaderView{
         id: header
 
-        width: parent.width
         height: 50
 
+        anchors.left: parent.left
+        anchors.right: parent.right
         anchors.top: parent.top
 
-        currentTime: "--:--"
         currentDay: "--"
         currentWeek: "--"
         currentDate: "--"
@@ -188,40 +152,40 @@ Window {
         }
 
         onChangeDate: {
-            mainView.flag = 1;
+            //mainView.flag = 1;
             mainView.currentIndex = num;
             //console.log(num)
         }
     }
 
-//    BackButton{
-//        id: bckButton
+    //    BackButton{
+    //        id: bckButton
 
-//        anchors.right: parent.right
-//        anchors.bottom: lrButtons.top
-//        anchors.rightMargin: 10
-//        anchors.bottomMargin: 10
+    //        anchors.right: parent.right
+    //        anchors.bottom: lrButtons.top
+    //        anchors.rightMargin: 10
+    //        anchors.bottomMargin: 10
 
-//        height: 70
-//        width: 70
+    //        height: 70
+    //        width: 70
 
-//        indexTodayDay: header.indexTodayDay
+    //        indexTodayDay: header.indexTodayDay
 
-//        onPrevDateEnd: {
-//            lrButtons.offPrevDay();
+    //        onPrevDateEnd: {
+    //            lrButtons.offPrevDay();
 
-//            header.setTodayIndex();
-//            header.offComboBox();
-//        }
+    //            header.setTodayIndex();
+    //            header.offComboBox();
+    //        }
 
-//        onNotEnd: {
-//            lrButtons.unlockNextDay();
-//            lrButtons.unlockPrevDay();
+    //        onNotEnd: {
+    //            lrButtons.unlockNextDay();
+    //            lrButtons.unlockPrevDay();
 
-//            header.setTodayIndex();
-//            header.offComboBox();
-//        }
-//    }
+    //            header.setTodayIndex();
+    //            header.offComboBox();
+    //        }
+    //    }
 
     LeftRightControlPanel{
         id: lrButtons
@@ -240,7 +204,7 @@ Window {
             //view.state = "2"
             //view.state = "1"
             mainView.currentIndex++;
-            mainView.curIndexWitouthZero = mainView.currentIndex;
+            //mainView.curIndexWitouthZero = mainView.currentIndex;
             //console.log(mainView.currentIndex)
         }
 
@@ -248,7 +212,7 @@ Window {
             //header.prevDate();
             //tSys.prevDay();
             mainView.currentIndex--;
-            mainView.curIndexWitouthZero = mainView.currentIndex;
+            //mainView.curIndexWitouthZero = mainView.currentIndex;
             //console.log(mainView.currentIndex)
         }
     }

@@ -39,7 +39,7 @@ DEFINES += QT_DEPRECATED_WARNINGS
 #DEFINES += QT_DISABLE_DEPRECATED_BEFORE=0x060000    # disables all the APIs deprecated before Qt 6.0.0
 
 SOURCES += \
-        filteringsystem.cpp \
+        controller.cpp \
         main.cpp \
         pagereader.cpp \
         libs/QGumboParser/gumbo-parser/src/attribute.c \
@@ -55,15 +55,13 @@ SOURCES += \
         libs/QGumboParser/gumbo-parser/src/vector.c \
         libs/QGumboParser/qgumboattribute.cpp \
         libs/QGumboParser/qgumbodocument.cpp \
-        libs/QGumboParser/qgumbonode.cpp \
-        timemodule.cpp
+        libs/QGumboParser/qgumbonode.cpp
 
 RESOURCES += qml.qrc
 
 HEADERS += \
-        filteringsystem.h \
+        controller.h \
         pagereader.h \
-        timemodule.h \
         timetabledata.h \
         libs/QGumboParser/HtmlTag.h \
         libs/QGumboParser/gumbo-parser/src/attribute.h \
@@ -103,3 +101,5 @@ QML_DESIGNER_IMPORT_PATH =
 qnx: target.path = /tmp/$${TARGET}/bin
 else: unix:!android: target.path = /opt/$${TARGET}/bin
 !isEmpty(target.path): INSTALLS += target
+
+DISTFILES +=

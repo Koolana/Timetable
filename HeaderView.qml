@@ -6,11 +6,10 @@ import QtQuick.Layouts 1.3
 import QtQuick.Shapes 1.13
 
 Rectangle {
-    property string currentTime: ""
     property string currentDay: ""
     property string currentWeek: ""
     property string currentDate: ""
-    property int indexTodayDay: 0
+    property int indexTodayDay: -1
     property bool isCh: true
 
     property int animationDuration: 250
@@ -20,10 +19,47 @@ Rectangle {
     signal notEnd();
     signal changeDate(int num);
 
+    property string colorFont: "#ffffff";
+    property string colorType0: "#2c3e50";
+    property string colorType1: "#18bc9c";
+    property string colorType2: "#2c3e60";
+    property string colorType3: "#6c7eb0";
+    property string colorType4: "#888888";
+
+    function addDateToList(data){
+        dateList.append({
+                            text: data,
+                        });
+    }
+
+    ListModel{
+        id: dataModel
+        ListElement{ text: "Пн" }
+        ListElement{ text: "Вт" }
+        ListElement{ text: "Ср" }
+        ListElement{ text: "Чт" }
+        ListElement{ text: "Пт" }
+        ListElement{ text: "Сб" }
+    }
+
+    ListModel{
+        id: dateList
+    }
+
+    ListModel{
+        id: daysList
+        ListElement{ text: "Понедельник" }
+        ListElement{ text: "Вторник" }
+        ListElement{ text: "Среда" }
+        ListElement{ text: "Четверг" }
+        ListElement{ text: "Пятница" }
+        ListElement{ text: "Суббота" }
+    }
+
     function setIndex(ind){
         inViewCombo.currentIndex = ind;
 
-        if(ind == 11){
+        if(ind == dateList.count - 1){
             nextDateEnd();
         }else{
             if(ind == 0){
@@ -38,7 +74,7 @@ Rectangle {
         }
 
         if(ind < 0){
-            inViewCombo.currentIndex = 11;
+            inViewCombo.currentIndex = dateList.count - 1;
         }
 
         if(ind == indexTodayDay)
@@ -68,7 +104,7 @@ Rectangle {
         setIndex(--inViewCombo.currentIndex);
     }
 
-    color: "#2c3e50"
+    color: colorType0
 
     HamburgerMenu {
         id: timeField
@@ -95,10 +131,10 @@ Rectangle {
         anchors.bottom: parent.bottom
         anchors.rightMargin: parent.width / 2
 
-        color: "#2c3e50"
+        color: colorType0
 
         border.width: 3
-        border.color: "#18bc9c"
+        border.color: colorType1
         radius: 10
 
         state: "off"
@@ -129,16 +165,15 @@ Rectangle {
             horizontalAlignment: Text.AlignHCenter
             verticalAlignment: Text.AlignVCenter
 
-            color: "#ffffff"
+            color: colorFont
 
-            text: "To\nToday"
+            text: "Назад"
         }
 
         MouseArea{
             anchors.fill: parent
 
             onClicked: {
-                tSys.setDay(indexTodayDay);
                 changeDate(indexTodayDay);
 
                 if(indexTodayDay == 0){
@@ -161,16 +196,6 @@ Rectangle {
         height: parent.height
         //color: "#ffffff"
 
-        ListModel{
-            id: dataModel
-            ListElement{ text: "Понедельник" }
-            ListElement{ text: "Вторник" }
-            ListElement{ text: "Среда" }
-            ListElement{ text: "Четверг" }
-            ListElement{ text: "Пятница" }
-            ListElement{ text: "Суббота" }
-        }
-
         Rectangle {
             id: comboEl
             anchors.horizontalCenter: parent.horizontalCenter
@@ -181,7 +206,7 @@ Rectangle {
             width: 220
 
             border.width: 3
-            border.color: inViewCombo.currentIndex == indexTodayDay ? "#18bc9c" : "#5c6ea0"
+            border.color: inViewCombo.currentIndex == indexTodayDay ? colorType1 : colorType4
             radius: 10
 
             color: parent.parent.color
@@ -209,12 +234,12 @@ Rectangle {
 
                 horizontalAlignment: Text.AlignHCenter
                 verticalAlignment: Text.AlignVCenter
-                text: currentDay + " (" + currentWeek + ")\n" + currentDate;
+                text: daysList.get(inViewCombo.currentIndex).text + " (" + (isCh ? "ЧС" : "ЗН") + ")\n" + dateList.get(inViewCombo.currentIndex).text;
 
                 anchors.horizontalCenter: parent.horizontalCenter
                 anchors.verticalCenter: parent.verticalCenter
 
-                color: "#ffffff"
+                color: colorFont
             }
 
             MouseArea{
@@ -225,145 +250,74 @@ Rectangle {
                     inViewCombo.state = inViewCombo.state == "off" ? "on" : "off"
                 }
             }
+        }
+    }
 
-            ListView {
-                id: inViewCombo
+    ListView {
+        id: inViewCombo
 
-                currentIndex: indexTodayDay;
+        currentIndex: indexTodayDay;
+        orientation: ListView.Horizontal
 
-                visible: true
-                height: comboEl.height * dataModel.count
-                anchors.top: parent.bottom
-                model: dataModel
+        height: parent.height
 
-                anchors.topMargin: -comboEl.height * dataModel.count
+        anchors.right: parent.right
+        anchors.left: parent.left
+        anchors.top: parent.bottom
+        model: dataModel
 
-                z: -1
+        anchors.topMargin: -parent.height
 
-                state: "off"
-                states: [
-                    State {
-                        name: "off"
-                    },
+        z: -1
 
-                    State {
-                        name: "on"
-                        PropertyChanges { target: inViewCombo; anchors.topMargin: 0 }
-                    }
-                ]
+        state: "off"
+        states: [
+            State {
+                name: "off"
+            },
 
-                transitions: [
-                    Transition {
-                        PropertyAnimation { target: inViewCombo; properties: "anchors.topMargin";
-                            duration: animationDuration; easing.type: Easing.InOutQuad }
-                    }
-                ]
+            State {
+                name: "on"
+                PropertyChanges { target: inViewCombo; anchors.topMargin: 0 }
+            }
+        ]
 
-                delegate: Rectangle {
-                    width: comboEl.width
-                    height: comboEl.height
+        transitions: [
+            Transition {
+                PropertyAnimation { target: inViewCombo; properties: "anchors.topMargin";
+                    duration: animationDuration; easing.type: Easing.InOutQuad }
+            }
+        ]
 
-                    color: "#2c3e50"
-                    radius: 10
+        delegate: Rectangle {
+            width: inViewCombo.width / dataModel.count
+            height: parent.height
 
-                    Rectangle{
-                        id: delegDayField
-                        anchors.left: parent.left
-                        anchors.top: parent.top
-                        anchors.bottom: parent.bottom
+            color: colorType0
 
-                        color: "#2c3e50"
+            border.width: inViewCombo.currentIndex == model.index ? 5 : indexTodayDay === model.index ? 3 : 1
+            border.color: indexTodayDay === model.index ? colorType1 : colorType4
+            radius: 10
 
-                        width: 120
+            MouseArea{
+                anchors.fill: parent
 
-                        Text {
-                            anchors.horizontalCenter: parent.horizontalCenter
-                            anchors.verticalCenter: parent.verticalCenter
+                onClicked: {
+                    changeDate(model.index);
 
-                            color: "#ffffff"
-
-                            text: model.text
-                        }
-
-                        border.width: 1
-                        border.color: "#5c6ea0"
-                        radius: 10
-                    }
-
-                    Rectangle{
-                        anchors.left: delegDayField.right
-                        anchors.top: parent.top
-                        anchors.bottom: parent.bottom
-
-                        width: (parent.width - delegDayField.width) / 2
-
-                        color: "#2c3e50"
-
-                        Text{
-                            id: oneTextField
-                            anchors.fill: parent
-                            horizontalAlignment: Text.AlignHCenter
-                            verticalAlignment: Text.AlignVCenter
-
-                            color: "#ffffff"
-
-                            text: isCh ? "ЧС" : "ЗН"
-                        }
-
-
-                        MouseArea{
-                            anchors.fill: parent
-
-                            onClicked: {
-                                tSys.setDay(model.index);
-                                changeDate(model.index);
-
-                                setIndex(model.index);
-                            }
-                        }
-
-                        border.width: inViewCombo.currentIndex == model.index ? 5 : indexTodayDay === model.index ? 3 : 1
-                        border.color: indexTodayDay === model.index ? "#18bc9c" : "#5c6ea0"
-                        radius: 10
-                    }
-
-                    Rectangle{
-                        anchors.right: parent.right
-                        anchors.top: parent.top
-                        anchors.bottom: parent.bottom
-
-                        width: (parent.width - delegDayField.width) / 2
-
-                        color: "#2c3e50"
-
-                        Text{
-                            id: twoTextField
-                            anchors.fill: parent
-                            horizontalAlignment: Text.AlignHCenter
-                            verticalAlignment: Text.AlignVCenter
-
-                            color: "#ffffff"
-
-                            text: !isCh ? "ЧС" : "ЗН"
-                        }
-
-
-                        MouseArea{
-                            anchors.fill: parent
-
-                            onClicked: {
-                                tSys.setDay(model.index + 7);
-                                changeDate(model.index + 6);
-
-                                setIndex(model.index + 6);
-                            }
-                        }
-
-                        border.width: inViewCombo.currentIndex == model.index + 6 ? 5 : 1
-                        border.color: "#5c6ea0"
-                        radius: 10
-                    }
+                    setIndex(model.index);
                 }
+            }
+
+            Text{
+                id: oneTextField
+                anchors.fill: parent
+                horizontalAlignment: Text.AlignHCenter
+                verticalAlignment: Text.AlignVCenter
+
+                color: colorFont
+
+                text: model.text
             }
         }
     }
