@@ -4,6 +4,7 @@
 #include <QObject>
 #include "pagereader.h"
 #include "controller.h"
+#include <QTemporaryFile>
 
 int main(int argc, char *argv[])
 {

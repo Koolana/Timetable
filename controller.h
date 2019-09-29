@@ -4,6 +4,9 @@
 #include <QObject>
 #include "timetabledata.h"
 
+#include <QtSql/QSqlDatabase>
+#include <QtSql/QSqlQuery>
+
 class Controller : public QObject
 {
     Q_OBJECT

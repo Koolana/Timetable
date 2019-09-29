@@ -7,5 +7,6 @@
         <file>BackButton.qml</file>
         <file>HamburgerMenu.qml</file>
         <file>ListLessonView.qml</file>
+        <file>LabBase</file>
     </qresource>
 </RCC>

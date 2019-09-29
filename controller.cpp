@@ -1,60 +1,38 @@
 ﻿#include "controller.h"
 
 #include "QDebug"
+#include <QTemporaryFile>
 
 Controller::Controller(QList<DayData*> inputWeek, QObject *parent) : QObject(parent)
 {
     allWeekData = inputWeek;
 
-    labList.append(new LabWork({QDate(2019, 9, 13),
-                                new QTime(8, 30),
-                                new QTime(10, 5),
-                                QString("Нейронные сети"),
-                                QString("517м"),
-                                QString("Имя Преп.")}));
+    QTemporaryFile tmpFile;//временный файл sql для милого андройда т.к sqlite не поддерживает пакеты ресурсов qt
+    tmpFile.setFileTemplate("XXXXXX");
+    if (tmpFile.open()) {
+        QString tmp_filename=tmpFile.fileName();
+        qDebug() << "temporary" << tmp_filename;
 
-    labList.append(new LabWork({QDate(2019, 9, 21),
-                                new QTime(10, 15),
-                                new QTime(15, 25),
-                                QString("Статрадиотехника"),
-                                QString("517м"),
-                                QString("Имя Преп.")}));
+        QTextStream stream(&tmpFile);
 
-    labList.append(new LabWork({QDate(2019, 9, 27),
-                                new QTime(8, 30),
-                                new QTime(10, 5),
-                                QString("Нейронные сети"),
-                                QString("517м"),
-                                QString("Имя Преп.")}));
+        QFile file(":/LabBase");
+        if (file.open(QIODevice::ReadOnly)) {
+            tmpFile.write(file.readAll());
+            //tmpFile.write("123");
+            stream << tmpFile.readAll();
+        }
 
-    labList.append(new LabWork({QDate(2019, 9, 28),
-                                new QTime(10, 15),
-                                new QTime(15, 25),
-                                QString("Теория обработки информации (ТОИ)"),
-                                QString("517м"),
-                                QString("Имя Преп.")}));
+        stream.flush();
+        tmpFile.seek(0);
 
-    labList.append(new LabWork({QDate(2019, 10, 5),
-                                new QTime(8, 30),
-                                new QTime(15, 25),
-                                QString("ТиССУТС"),
-                                QString("1б"),
-                                QString("Имя Преп.")}));
+        tmpFile.close();
+    }
 
-    labList.append(new LabWork({QDate(2019, 10, 11),
-                                new QTime(8, 30),
-                                new QTime(10, 5),
-                                QString("Нейронные сети"),
-                                QString("517м"),
-                                QString("Имя Преп.")}));
-
-    labList.append(new LabWork({QDate(2019, 10, 12),
-                                new QTime(8, 30),
-                                new QTime(19, 00),
-                                QString("ТиССУТС"),
-                                QString("1б"),
-                                QString("Имя Преп.")}));
-    //qDebug() << labList.at(0)->date.toString();
+    //Подключаем базу данных
+    QSqlDatabase db;
+    db = QSqlDatabase::addDatabase("QSQLITE");
+    db.setDatabaseName(tmpFile.fileName());
+    db.open();
 }
 
 void Controller::init(){
@@ -77,11 +55,19 @@ QList<LabWork*> Controller::getLabWorksByDate(QDate date)
     QList<LabWork*> tmp;
     tmp.clear();
 
-    for(auto oneLab: labList){
-        if(!oneLab->date.daysTo(date))
-        {
-            tmp.append(oneLab);
-        }
+    //Осуществляем запрос
+    QSqlQuery query;
+    query.exec("SELECT * FROM `LabWorks` WHERE `Month` = '" + QString::number(date.month()) + "' AND `Day` = '" + QString::number(date.day()) + "'");
+
+    //Выводим значения из запроса
+    while (query.next())
+    {
+        tmp.append(new LabWork({date,
+                                new QTime(query.value(5).toInt(), query.value(6).toInt()),
+                                new QTime(query.value(7).toInt(), query.value(8).toInt()),
+                                query.value(9).toString(),
+                                query.value(11).toString(),
+                                query.value(10).toString()}));
     }
 
     return tmp;
