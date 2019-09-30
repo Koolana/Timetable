@@ -18,7 +18,7 @@ public:
     ~PageReader();
 
     //QTextEdit* testTextBox; //временно, убрать отображение вообще из PageReader
-    QList<DayData*> week;
+    QList<DayData*> week;//переделать модель week (жестко связать с sql);
 
 private:
     QNetworkAccessManager* manager;

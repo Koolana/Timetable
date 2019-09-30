@@ -2,6 +2,7 @@
 
 #include "QDebug"
 #include <QTemporaryFile>
+#include <QSqlError>
 
 Controller::Controller(QList<DayData*> inputWeek, QObject *parent) : QObject(parent)
 {
@@ -18,7 +19,6 @@ Controller::Controller(QList<DayData*> inputWeek, QObject *parent) : QObject(par
         QFile file(":/LabBase");
         if (file.open(QIODevice::ReadOnly)) {
             tmpFile.write(file.readAll());
-            //tmpFile.write("123");
             stream << tmpFile.readAll();
         }
 
@@ -26,12 +26,13 @@ Controller::Controller(QList<DayData*> inputWeek, QObject *parent) : QObject(par
         tmpFile.seek(0);
 
         tmpFile.close();
+        file.close();
     }
 
     //Подключаем базу данных
     QSqlDatabase db;
     db = QSqlDatabase::addDatabase("QSQLITE");
-    db.setDatabaseName(tmpFile.fileName());
+    db.setDatabaseName(tmpFile.fileName());//открываем временный файл sql, при закрытии приложения он удаляется
     db.open();
 }
 

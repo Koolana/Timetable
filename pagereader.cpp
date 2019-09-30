@@ -10,6 +10,9 @@
 #include <QtXml>
 #include <libs/QGumboParser/qgumbodocument.h>
 #include <libs/QGumboParser/qgumbonode.h>
+#include <QSqlDatabase>
+#include <QSqlQuery>
+#include <QSqlError>
 
 PageReader::PageReader(QObject *parent)
     : QObject(parent)
@@ -19,8 +22,99 @@ PageReader::PageReader(QObject *parent)
 
 PageReader::PageReader(QString addr, QObject *parent)
     : QObject(parent)
-{
-    downloadAndReadPage(addr);
+{//переделать модель week (жестко связать с sql);
+    QFile lessonsBase("./LessonsBase");
+    if(lessonsBase.exists())
+    {
+        QSqlDatabase db;
+        db = QSqlDatabase::addDatabase("QSQLITE");
+        db.setDatabaseName(lessonsBase.fileName());
+        db.open();
+
+        QSqlQuery query;
+        query.exec("SELECT * FROM `Lessons` WHERE `Group` = 'СМ5-71Б'");
+
+        //Выводим значения из запроса
+        QString strStart("ПН");
+
+        query.next();
+        DayData* day = new DayData();
+        day->name = query.value(2).toString();
+        day->lessons.append(new Lesson({query.value(3).toInt(),
+                                        new QTime(query.value(4).toInt(), query.value(5).toInt()),
+                                        new QTime(query.value(6).toInt(), query.value(7).toInt()),
+                                        query.value(8).toString(),
+                                        query.value(9).toString(),
+                                        query.value(10).toString(),
+                                        query.value(11).toString()}));
+
+        while (query.next())
+        {
+            if(strStart != query.value(2).toString()){
+                strStart = query.value(2).toString();
+                week.append(day);
+                day = new DayData();
+            }
+
+            day->name = query.value(2).toString();
+            day->lessons.append(new Lesson({query.value(3).toInt(),
+                                            new QTime(query.value(4).toInt(), query.value(5).toInt()),
+                                            new QTime(query.value(6).toInt(), query.value(7).toInt()),
+                                            query.value(8).toString(),
+                                            query.value(9).toString(),
+                                            query.value(10).toString(),
+                                            query.value(11).toString()}));
+
+            //qDebug() << query.value(2).toString();
+        }
+        week.append(day);
+
+        db.close();
+        lessonsBase.close();
+    }else{
+        downloadAndReadPage(addr);
+
+        lessonsBase.open(QIODevice::WriteOnly);
+
+        QSqlDatabase db;
+        db = QSqlDatabase::addDatabase("QSQLITE");
+        db.setDatabaseName(lessonsBase.fileName());
+        db.open();
+
+        QSqlQuery query;
+        query.exec("CREATE TABLE `Lessons` ( `_id` INTEGER PRIMARY KEY AUTOINCREMENT, `Group` TEXT NOT NULL, `Day` TEXT NOT NULL, `ChZn` INTEGER NOT NULL, `TimeStartHour` INTEGER NOT NULL, `TimeStartMinute` INTEGER NOT NULL, `TimeEndMinute` INTEGER NOT NULL, `TimeEndHour` INTEGER NOT NULL, `lessonType` TEXT, `lessonName` TEXT, `lessonCab` TEXT, `lessonLecturer` TEXT )");
+        query.prepare("INSERT INTO 'Lessons' (`Group`, `Day`, `ChZn`, `TimeStartHour`, `TimeStartMinute`, `TimeEndMinute`, `TimeEndHour`, `lessonType`, `lessonName`, `lessonCab`, `lessonLecturer`) VALUES(?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)"); // подготавливаем запрос
+
+        for(auto day : week)
+        {
+            for(auto lesson : day->lessons)
+            {
+                //if(lesson->lessonName != "" && lesson->lessonName != "СР")
+                //{
+                    query.addBindValue("СМ5-71Б");
+
+                    query.addBindValue(day->name);
+                    query.addBindValue(lesson->NumeratorDenumerataor);
+                    query.addBindValue(lesson->timeStart->hour());
+                    query.addBindValue(lesson->timeStart->minute());
+                    query.addBindValue(lesson->timeEnd->hour());
+                    query.addBindValue(lesson->timeEnd->minute());
+                    query.addBindValue(lesson->lessonType);
+                    query.addBindValue(lesson->lessonName);
+                    query.addBindValue(lesson->lessonCab);
+                    query.addBindValue(lesson->lessonLecturer);
+
+                    if (!query.exec()) { // выполняем готовый запрос
+                        qDebug() << "Error";
+                        qDebug() << query.lastError().text();
+                    }
+                //}
+            }
+        }
+
+        db.close();
+        lessonsBase.close();
+    }
 }
 
 void PageReader::downloadAndReadPage(QString addr)
