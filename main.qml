@@ -55,6 +55,19 @@ Window {
         onSendWeekTypeToQml: {
             header.isCh = isCh
         }
+
+        onSendClearAllToQml: {
+            header.clearAll();
+
+            while(mainView.count)
+            {
+                mainView.removeItem(mainView.itemAt(0));
+            }
+
+            header.indexTodayDay = 0
+            mainView.currentIndex = 0
+            header.isCh = true
+        }
     }
 
     ListModel {
@@ -125,6 +138,12 @@ Window {
         }
     }
 
+    MenuView{
+        id: menuView
+
+        headerHeight: header.height
+    }
+
     HeaderView{
         id: header
 
@@ -155,6 +174,10 @@ Window {
             //mainView.flag = 1;
             mainView.currentIndex = num;
             //console.log(num)
+        }
+
+        onMenuClicked: {
+            menuView.changeState();
         }
     }
 

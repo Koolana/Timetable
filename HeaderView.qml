@@ -6,6 +6,9 @@ import QtQuick.Layouts 1.3
 import QtQuick.Shapes 1.13
 
 Rectangle {
+    MouseArea{
+        anchors.fill: parent
+    }
     property string currentDay: ""
     property string currentWeek: ""
     property string currentDate: ""
@@ -18,6 +21,7 @@ Rectangle {
     signal prevDateEnd();
     signal notEnd();
     signal changeDate(int num);
+    signal menuClicked();
 
     property string colorFont: "#ffffff";
     property string colorType0: "#2c3e50";
@@ -25,6 +29,10 @@ Rectangle {
     property string colorType2: "#2c3e60";
     property string colorType3: "#6c7eb0";
     property string colorType4: "#888888";
+
+    function clearAll(){
+        dateList.clear();
+    }
 
     function addDateToList(data){
         dateList.append({
@@ -85,6 +93,8 @@ Rectangle {
             bckButton.state = "on"
         }
 
+        dayField.text = daysList.get(inViewCombo.currentIndex).text + " (" + (isCh ? "ЧС" : "ЗН") + ")\n" + dateList.get(inViewCombo.currentIndex).text;
+
         offComboBox();
     }
 
@@ -111,12 +121,16 @@ Rectangle {
 
         animationDuration: animationDuration
 
-        anchors.leftMargin: 10
+        anchors.leftMargin: 0
 
 //        text: currentTime
 
         anchors.left: parent.left
         anchors.verticalCenter: parent.verticalCenter
+
+        onButClicked: {
+            menuClicked();
+        }
 
 //        color: "#ffffff"
     }
@@ -156,18 +170,44 @@ Rectangle {
             }
         ]
 
-        Text{
+//        Text{
+//            width: parent.width
+//            height: parent.height
+
+//            anchors.horizontalCenter: parent.horizontalCenter
+//            anchors.verticalCenter: parent.verticalCenter
+//            horizontalAlignment: Text.AlignHCenter
+//            verticalAlignment: Text.AlignVCenter
+
+//            color: colorFont
+
+//            text: "Назад"
+//        }
+
+        Shape {
             width: parent.width
             height: parent.height
 
             anchors.horizontalCenter: parent.horizontalCenter
             anchors.verticalCenter: parent.verticalCenter
-            horizontalAlignment: Text.AlignHCenter
-            verticalAlignment: Text.AlignVCenter
+            antialiasing: true
 
-            color: colorFont
+            ShapePath {
+                //ashPattern: [ 1, 4 ]
+                fillColor: bckButton.color
+                strokeWidth: 3
+                strokeColor: "#ffffff"
 
-            text: "Назад"
+                capStyle: ShapePath.RoundCap
+                joinStyle: ShapePath.RoundJoin
+
+                startX: bckButton.width / 2 - 2; startY: bckButton.height / 2 - 12
+                PathLine { x: bckButton.width / 2 - 2; y: bckButton.height / 2 - 12 }
+                PathLine { x: bckButton.width / 2 - 15; y: bckButton.height / 2 }
+                PathLine { x: bckButton.width / 2 - 2; y: bckButton.height / 2 + 12 }
+                PathLine { x: bckButton.width / 2 - 15; y: bckButton.height / 2 }
+                PathLine { x: bckButton.width / 2 + 10; y: bckButton.height / 2 }
+            }
         }
 
         MouseArea{
@@ -188,7 +228,7 @@ Rectangle {
     }
 
     //Сделать выпадающее меню с выбором дня
-    Item {
+    Item {//сделать динамическое отображение дней в кнопках
         anchors.horizontalCenter: parent.horizontalCenter
         anchors.verticalCenter: parent.verticalCenter
 
@@ -264,9 +304,13 @@ Rectangle {
         anchors.right: parent.right
         anchors.left: parent.left
         anchors.top: parent.bottom
+
+        anchors.leftMargin: 3
         model: dataModel
 
         anchors.topMargin: -parent.height
+
+        spacing: 3
 
         z: -1
 
@@ -278,7 +322,7 @@ Rectangle {
 
             State {
                 name: "on"
-                PropertyChanges { target: inViewCombo; anchors.topMargin: 0 }
+                PropertyChanges { target: inViewCombo; anchors.topMargin: 1 }
             }
         ]
 
@@ -290,7 +334,7 @@ Rectangle {
         ]
 
         delegate: Rectangle {
-            width: inViewCombo.width / dataModel.count
+            width: inViewCombo.width / dataModel.count - 3
             height: parent.height
 
             color: colorType0

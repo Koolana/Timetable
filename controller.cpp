@@ -38,10 +38,20 @@ Controller::Controller(QList<DayData*> inputWeek, QObject *parent) : QObject(par
 
 void Controller::init(){
     setWeekToQml(QDateTime::currentDateTime());
+
+//    emit sendClearAllToQml();
+//    QList<QDate> tmp;
+//    tmp.append(QDateTime::currentDateTime().date());
+//    tmp.append(QDateTime::currentDateTime().date());
+//    sendDateListToQml(tmp);
+//    emit sendDayNumberToQml(1);
 }
 
 void Controller::setWeekToQml(QDateTime date){
-    QList<QDate> listDate = getDateWeekListToQml(date);
+    emit sendClearAllToQml();
+
+    QList<QDate> listDate = getDateWeekList(date);
+    sendDateListToQml(listDate);
     QList<DayData*> listDays = getDaysListWithFilter(getCurrentWeekType(date));
     listDays = getDaysListWithLabWorks(listDays, listDate);
 
@@ -58,6 +68,7 @@ QList<LabWork*> Controller::getLabWorksByDate(QDate date)
 
     //Осуществляем запрос
     QSqlQuery query;
+    //qDebug() << QString::number(date.month());
     query.exec("SELECT * FROM `LabWorks` WHERE `Month` = '" + QString::number(date.month()) + "' AND `Day` = '" + QString::number(date.day()) + "'");
 
     //Выводим значения из запроса
@@ -79,6 +90,7 @@ QList<DayData*> Controller::getDaysListWithLabWorks(QList<DayData*> listDays, QL
     for(int i = 0; i < listDays.count(); i++)
     {
         QList<LabWork*> listLab  = getLabWorksByDate(listDate.at(i));
+        //qDebug() << listLab.count();
 
         for(auto oneLab: listLab){
             bool flag = false;
@@ -107,7 +119,7 @@ QList<DayData*> Controller::getDaysListWithLabWorks(QList<DayData*> listDays, QL
     return listDays;
 }
 
-QList<QDate> Controller::getDateWeekListToQml(QDateTime date){
+QList<QDate> Controller::getDateWeekList(QDateTime date){
     QDateTime tmp = date;
     QList<QDate> listDate;
     listDate.clear();
@@ -120,11 +132,17 @@ QList<QDate> Controller::getDateWeekListToQml(QDateTime date){
     for (int i = tmp.date().dayOfWeek() - 1; i > tmp.date().dayOfWeek() - 7; i--)
     {
         listDate.append(tmp.date().addDays(-i));
-        emit sendDateToQml(tmp.date().addDays(-i).toString("dd.MM.yy"));
+        //emit sendDateToQml(tmp.date().addDays(-i).toString("dd.MM.yy"));
         //qDebug() << i;
     }
 
     return listDate;
+}
+
+void Controller::sendDateListToQml(QList<QDate> dates){//добавить отправления полного и короткого названия дня по датам
+    for (auto date : dates){
+        emit sendDateToQml(date.toString("dd.MM.yy"));
+    }
 }
 
 void Controller::sendDaysListToQml(QList<DayData*> tmp){
@@ -169,7 +187,8 @@ QList<DayData*> Controller::getDaysListWithFilter (int weekType){
         for (auto lesson: day->lessons)
         {
             if (lesson->NumeratorDenumerataor == weekType || lesson->NumeratorDenumerataor == 2){
-                newDay->lessons.append(lesson);
+                Lesson* les =  new Lesson(*lesson);
+                newDay->lessons.append(les);
             }
         }
 

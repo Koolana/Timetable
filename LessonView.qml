@@ -9,8 +9,8 @@ Rectangle {
     property string colorFont: "#ffffff";
     property string colorType0: "#2c3e50";
     property string colorType1: "#18bc9c";
-    property string colorType2: "#3498db";
-    property string colorType3: "#ca0318"//"#6c7eb0";
+    property string colorType2: "#eFaF00";//"#3498db";
+    property string colorType3: "#ca3838"//"#6c7eb0";
     property string colorType4: "#888888";
 
     radius: 10

@@ -2,6 +2,7 @@ import QtQuick 2.0
 import QtGraphicalEffects 1.0
 
 Item{
+    id: listLesIt;
     property string colorFont: "#ffffff";
     property string colorType0: "#2c3e50";
     property string colorType1: "#18bc9c";
@@ -72,14 +73,14 @@ Item{
                 anchors.left: parent.left
                 anchors.top: parent.top
 
-                RadialGradient
-                {
-                    anchors.fill: parent
-                    gradient: Gradient{
-                        GradientStop {position: 0.5; color: backEl.color;}
-                        GradientStop {position: 1;color: Qt.rgba(0, 0, 0, 1);}
-                    }
-                }
+//                RadialGradient
+//                {
+//                    anchors.fill: parent
+//                    gradient: Gradient{
+//                        GradientStop {position: 0.5; color: backEl.color;}
+//                        GradientStop {position: 1;color: Qt.rgba(0, 0, 0, 1);}
+//                    }
+//                }
 
 //                gradient: Gradient
 //                {
