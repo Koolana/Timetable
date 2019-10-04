@@ -37,17 +37,17 @@ Controller::Controller(QList<DayData*> inputWeek, QObject *parent) : QObject(par
 }
 
 void Controller::init(){
-    setWeekToQml(QDateTime::currentDateTime());
+    setWeekToQml(QDate::currentDate());
 
 //    emit sendClearAllToQml();
 //    QList<QDate> tmp;
-//    tmp.append(QDateTime::currentDateTime().date());
-//    tmp.append(QDateTime::currentDateTime().date());
+//    tmp.append(QDate::currentDate());
+//    tmp.append(QDate::currentDate());
 //    sendDateListToQml(tmp);
 //    emit sendDayNumberToQml(1);
 }
 
-void Controller::setWeekToQml(QDateTime date){
+void Controller::setWeekToQml(QDate date){
     emit sendClearAllToQml();
 
     QList<QDate> listDate = getDateWeekList(date);
@@ -55,7 +55,7 @@ void Controller::setWeekToQml(QDateTime date){
     QList<DayData*> listDays = getDaysListWithFilter(getCurrentWeekType(date));
     listDays = getDaysListWithLabWorks(listDays, listDate);
 
-    emit sendWeekTypeToQml(!getCurrentWeekType(date));
+    //emit sendWeekTypeToQml(!getCurrentWeekType(date));
 
     sendDaysListToQml(listDays);
     emit sendDayNumberToQml(QDateTime::currentDateTime().date().dayOfWeek() == 7 ? QDateTime::currentDateTime().addDays(1).date().dayOfWeek() - 1 : QDateTime::currentDateTime().date().dayOfWeek() - 1);
@@ -119,19 +119,19 @@ QList<DayData*> Controller::getDaysListWithLabWorks(QList<DayData*> listDays, QL
     return listDays;
 }
 
-QList<QDate> Controller::getDateWeekList(QDateTime date){
-    QDateTime tmp = date;
+QList<QDate> Controller::getDateWeekList(QDate date){
+    QDate tmp = date;
     QList<QDate> listDate;
     listDate.clear();
 
-    if( date.date().dayOfWeek() == 7)
+    if( date.dayOfWeek() == 7)
     {
         tmp = date.addDays(1);
     }
 
-    for (int i = tmp.date().dayOfWeek() - 1; i > tmp.date().dayOfWeek() - 7; i--)
+    for (int i = tmp.dayOfWeek() - 1; i > tmp.dayOfWeek() - 7; i--)
     {
-        listDate.append(tmp.date().addDays(-i));
+        listDate.append(tmp.addDays(-i));
         //emit sendDateToQml(tmp.date().addDays(-i).toString("dd.MM.yy"));
         //qDebug() << i;
     }
@@ -141,7 +141,10 @@ QList<QDate> Controller::getDateWeekList(QDateTime date){
 
 void Controller::sendDateListToQml(QList<QDate> dates){//добавить отправления полного и короткого названия дня по датам
     for (auto date : dates){
-        emit sendDateToQml(date.toString("dd.MM.yy"));
+        QString dateLongName = QDate::longDayName(date.dayOfWeek());
+        dateLongName[0] = dateLongName[0].toUpper();
+
+        emit sendDateToQml(date.toString("dd.MM.yy"), dateLongName, QDate::shortDayName(date.dayOfWeek()).toUpper(), (bool)getCurrentWeekType(date));
     }
 }
 
@@ -164,12 +167,12 @@ void Controller::sendDaysListToQml(QList<DayData*> tmp){
     }
 }
 
-int Controller::getCurrentWeekType(QDateTime nowInDate){
-    QDateTime firstDate = QDateTime(QDate(nowInDate.date().year(), 9, 2));//когда начался первый числитель, глобальное значение, вынести в define
-    QDateTime tmp = nowInDate;
+int Controller::getCurrentWeekType(QDate nowInDate){
+    QDate firstDate = QDate(nowInDate.year(), 9, 2);//когда начался первый числитель, глобальное значение, вынести в define
+    QDate tmp = nowInDate;
 
-    if(tmp.date().dayOfWeek() > 6){
-        tmp = QDateTime(tmp.date().addDays(1));
+    if(tmp.dayOfWeek() > 6){
+        tmp = tmp.addDays(1);
     }
 
     return firstDate.daysTo(tmp) / 7 % 2 ? 1 : 0;

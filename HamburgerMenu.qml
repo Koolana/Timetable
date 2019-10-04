@@ -3,6 +3,10 @@ import QtQuick 2.0
 Item{
     property int animationDuration: 350
 
+    function change(){
+        root.state = root.state == "menu" ? "back" : "menu"
+    }
+
     signal butClicked();
 
     width: parent.height

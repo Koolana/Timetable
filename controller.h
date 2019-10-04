@@ -15,9 +15,9 @@ public:
 
     void init();
 
-    static int getCurrentWeekType(QDateTime nowInDate);
+    static int getCurrentWeekType(QDate nowInDate);
     QList<DayData*> getDaysListWithFilter(int weekType);
-    QList<QDate> getDateWeekList(QDateTime date);
+    QList<QDate> getDateWeekList(QDate date);
     QList<LabWork*> getLabWorksByDate(QDate date);
     QList<DayData*> getDaysListWithLabWorks(QList<DayData*> listDays, QList<QDate> listDate);
 
@@ -26,13 +26,13 @@ public:
 
     bool isCurrentLesson(Lesson* less);
 
-    void setWeekToQml(QDateTime date);
+    void setWeekToQml(QDate date);
 
 signals:
     void sendOneLessonToQml(QString time, QString type, QString name, QString cab, QString lecturer);
     void finishSendDayToQml();
     void sendDayNumberToQml(int num);
-    void sendDateToQml(QString date);
+    void sendDateToQml(QString date, QString dateLongName, QString dateShortName, bool isCh);
     void sendWeekTypeToQml(bool isCh);
     void sendClearAllToQml();
 

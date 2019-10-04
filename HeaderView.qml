@@ -13,7 +13,6 @@ Rectangle {
     property string currentWeek: ""
     property string currentDate: ""
     property int indexTodayDay: -1
-    property bool isCh: true
 
     property int animationDuration: 250
 
@@ -34,20 +33,18 @@ Rectangle {
         dateList.clear();
     }
 
-    function addDateToList(data){
-        dateList.append({
-                            text: data,
-                        });
+    function changeHamburger(){
+        timeField.change();
     }
 
-    ListModel{
-        id: dataModel
-        ListElement{ text: "Пн" }
-        ListElement{ text: "Вт" }
-        ListElement{ text: "Ср" }
-        ListElement{ text: "Чт" }
-        ListElement{ text: "Пт" }
-        ListElement{ text: "Сб" }
+    function addDateToList(date, dateLongName, dateShortName, isCh){
+        dateList.append({
+                            text: dateLongName + " (" + (isCh ? "ЧС" : "ЗН") + ")\n" + date,
+                        });
+
+        dateShortList.append({
+                            text: dateShortName,
+                             });
     }
 
     ListModel{
@@ -55,13 +52,7 @@ Rectangle {
     }
 
     ListModel{
-        id: daysList
-        ListElement{ text: "Понедельник" }
-        ListElement{ text: "Вторник" }
-        ListElement{ text: "Среда" }
-        ListElement{ text: "Четверг" }
-        ListElement{ text: "Пятница" }
-        ListElement{ text: "Суббота" }
+        id: dateShortList
     }
 
     function setIndex(ind){
@@ -93,7 +84,7 @@ Rectangle {
             bckButton.state = "on"
         }
 
-        dayField.text = daysList.get(inViewCombo.currentIndex).text + " (" + (isCh ? "ЧС" : "ЗН") + ")\n" + dateList.get(inViewCombo.currentIndex).text;
+        //dayField.text = dateList.get(inViewCombo.currentIndex).text;
 
         offComboBox();
     }
@@ -274,7 +265,7 @@ Rectangle {
 
                 horizontalAlignment: Text.AlignHCenter
                 verticalAlignment: Text.AlignVCenter
-                text: daysList.get(inViewCombo.currentIndex).text + " (" + (isCh ? "ЧС" : "ЗН") + ")\n" + dateList.get(inViewCombo.currentIndex).text;
+                text: dateList.count == 0 ? "" : dateList.get(inViewCombo.currentIndex).text;
 
                 anchors.horizontalCenter: parent.horizontalCenter
                 anchors.verticalCenter: parent.verticalCenter
@@ -306,7 +297,7 @@ Rectangle {
         anchors.top: parent.bottom
 
         anchors.leftMargin: 3
-        model: dataModel
+        model: dateShortList
 
         anchors.topMargin: -parent.height
 
@@ -334,7 +325,7 @@ Rectangle {
         ]
 
         delegate: Rectangle {
-            width: inViewCombo.width / dataModel.count - 3
+            width: inViewCombo.width / dateShortList.count - 3
             height: parent.height
 
             color: colorType0

@@ -49,11 +49,7 @@ Window {
         }
 
         onSendDateToQml: {
-            header.addDateToList(date)
-        }
-
-        onSendWeekTypeToQml: {
-            header.isCh = isCh
+            header.addDateToList(date, dateLongName, dateShortName, isCh)
         }
 
         onSendClearAllToQml: {
@@ -66,7 +62,7 @@ Window {
 
             header.indexTodayDay = 0
             mainView.currentIndex = 0
-            header.isCh = true
+            //header.isCh = true
         }
     }
 
@@ -141,7 +137,12 @@ Window {
     MenuView{
         id: menuView
 
+        onChangedState: {
+            header.changeHamburger();
+        }
+
         headerHeight: header.height
+        windowWidth: parent.width
     }
 
     HeaderView{
