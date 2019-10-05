@@ -1,10 +1,10 @@
-import QtQuick 2.12
+import QtQuick 2.7
 import QtQuick.Window 2.12
 import QtQuick.Controls 2.5
 
 //import "qrc:/" //в винде это надо комментить //линухе !//
 
-Window {
+ApplicationWindow {
     id: appWindow
 
     property string colorFont: "#ffffff";

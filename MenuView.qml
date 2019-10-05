@@ -149,7 +149,8 @@ Item{
     }
 
     Rectangle {
-        width: 10;
+        id: actionFieldOfMenu
+        width: 20;
 
         opacity: 0
 
@@ -159,21 +160,28 @@ Item{
         MouseArea{
             property int curMouseX: 0
             property int startMargin: 0
+            property int lastMouseX: 0
+            property int speed: 0
             anchors.fill: parent
 
             onPressed: {
-                curMouseX = mouseX - 10
+                curMouseX = mouseX - actionFieldOfMenu.width
                 startMargin = root.anchors.leftMargin
-                root.anchors.leftMargin = startMargin + 10
+                root.anchors.leftMargin = startMargin + actionFieldOfMenu.width
+                backEl.visible = true
+                backEl.opacity = 0
             }
 
             onMouseXChanged: {
                 root.anchors.leftMargin = startMargin + ((mouseX - curMouseX) > 0 ? (mouseX - curMouseX) < root.width ? (mouseX - curMouseX) : root.width : 0)
-                console.log((mouseX - curMouseX));
+                //console.log(0.7 - Math.abs(root.anchors.leftMargin/root.width))
+                backEl.opacity = 0.7 - Math.abs(root.anchors.leftMargin/root.width)
+                speed = lastMouseX - mouseX
+                lastMouseX = mouseX
             }
 
             onReleased: {
-                if ((mouseX - curMouseX) > root.width/3){
+                if ((mouseX - curMouseX) > root.width/3 || speed < -4){
                     changeState();
                     changedState()
                 }else{
@@ -205,6 +213,7 @@ Item{
         states: [
             State {
                 name: "off"
+                PropertyChanges { target: backEl; opacity: 0; visible: false}
             },
 
             State {
@@ -223,23 +232,32 @@ Item{
         MouseArea{
             property int curMouseX: 0
             property int startMargin: 0
+            property int lastMouseX: 0
+            property int speed: 0
             anchors.fill: parent
 
             onPressed: {
                 curMouseX = mouseX
+                lastMouseX = mouseX
                 startMargin = root.anchors.leftMargin
             }
 
             onMouseXChanged: {
                 root.anchors.leftMargin = startMargin + ((mouseX - curMouseX) < 0 ? (mouseX - curMouseX) : 0)
+                backEl.opacity = 0.7 - Math.abs(root.anchors.leftMargin/root.width)
+                speed = lastMouseX - mouseX
+                lastMouseX = mouseX
+                //console.log(speed)
             }
 
             onReleased: {
-                if ((mouseX - curMouseX) < -root.width/3){
+                //console.log(lastMouseX - mouseX)
+                if ((mouseX - curMouseX) < -root.width/3 || speed > 4){
                     changeState();
                     changedState();
                 }else{
                     root.anchors.leftMargin = startMargin
+                    backEl.opacity = 0.7
                 }
 
                 curMouseX = 0;
