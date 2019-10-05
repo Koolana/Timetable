@@ -4,13 +4,24 @@ Item{
     property int animationDuration: 200
     property int headerHeight: 0
     property int windowWidth: 0
+    property int curStateMenu: 5
 
     function changeState(){
         root.state = root.state == "off" ? "on" : "off";
         backEl.state = backEl.state == "off" ? "on" : "off";
     }
 
+    function setStartMenuState(){
+        curStateMenu = 5
+        Controller.setMenuField("Назад");
+        changedCurrentField(curStateMenu);
+        root.state = "off"
+        backEl.state = "off"
+        //changedState();
+    }
+
     signal changedState();
+    signal changedCurrentField(var num);
 
     anchors.fill: parent
 
@@ -56,19 +67,22 @@ Item{
             id: elsMenu
 
             ListElement{
-                text: "test1";
+                text: "Личный кабинет";
             }
             ListElement{
-                text: "test2";
+                text: "Календарь";
             }
             ListElement{
-                text: "test3";
+                text: "Лаб. работы";
             }
             ListElement{
-                text: "test4";
+                text: "Настройки";
             }
             ListElement{
-                text: "test5";
+                text: "Обновить данные";
+            }
+            ListElement{
+                text: "Назад";
             }
         }
 
@@ -133,7 +147,16 @@ Item{
 
                     onClicked: {
                         //console.log(model.text);
-                        backBut.state = "unPressed";
+                        if(model.index != curStateMenu)
+                        {
+                            backBut.state = "unPressed";
+                            Controller.setMenuField(model.text);
+                            changedCurrentField(model.index);
+                            changeState();
+                            changedState();
+                        }
+
+                        curStateMenu = model.index;
                     }
 
                     onPressed: {
@@ -151,6 +174,8 @@ Item{
     Rectangle {
         id: actionFieldOfMenu
         width: 20;
+
+        visible: root.state == "off"
 
         opacity: 0
 
@@ -183,7 +208,7 @@ Item{
             onReleased: {
                 if ((mouseX - curMouseX) > root.width/3 || speed < -4){
                     changeState();
-                    changedState()
+                    changedState();
                 }else{
                     root.anchors.leftMargin = startMargin
                 }

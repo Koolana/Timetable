@@ -2,6 +2,10 @@ import QtQuick 2.0
 import QtGraphicalEffects 1.0
 
 Item{
+    function refreshMargin(){
+        view.positionViewAtBeginning();
+    }
+
     id: listLesIt;
     property string colorFont: "#ffffff";
     property string colorType0: "#2c3e50";
@@ -25,10 +29,14 @@ Item{
         spacing: 10
         model: dataModel
 
+        anchors.bottomMargin: 10
+
+        contentHeight: 10
+
         delegate: LessonView {
             id: lessonView
             width: mainView.width
-            height: 120
+            height: (model.typeText == "date") ? 40 : 120
 
             color: colorType0
             //border.color: model.color
@@ -40,6 +48,7 @@ Item{
 
             Rectangle {
                 id: backEl
+                visible: !(model.typeText == "date")
                 color: {
                     if( model.typeText === "(лек)"){
                         colorType1;
@@ -51,8 +60,6 @@ Item{
                             if( model.typeText === "(лаб)"){
                                 colorType3
                             }else{
-
-    //                        "#dddddd"
                                 colorType4
                             }
                         }
@@ -72,26 +79,6 @@ Item{
                 opacity: 1/*0.7*/
                 anchors.left: parent.left
                 anchors.top: parent.top
-
-//                RadialGradient
-//                {
-//                    anchors.fill: parent
-//                    gradient: Gradient{
-//                        GradientStop {position: 0.5; color: backEl.color;}
-//                        GradientStop {position: 1;color: Qt.rgba(0, 0, 0, 1);}
-//                    }
-//                }
-
-//                gradient: Gradient
-//                {
-//                    GradientStop {position: 0.000;color: Qt.rgba(1, 0, 0, 1);}
-//                    GradientStop {position: 0.167;color: Qt.rgba(1, 1, 0, 1);}
-//                    GradientStop {position: 0.333;color: Qt.rgba(0, 1, 0, 1);}
-//                    GradientStop {position: 0.500;color: Qt.rgba(0, 1, 1, 1);}
-//                    GradientStop {position: 0.667;color: Qt.rgba(0, 0, 1, 1);}
-//                    GradientStop {position: 0.833;color: Qt.rgba(1, 0, 1, 1);}
-//                    GradientStop {position: 1.000;color: Qt.rgba(1, 0, 0, 1);}
-//                }
             }
         }
     }

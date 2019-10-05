@@ -47,6 +47,75 @@ void Controller::init(){
 //    emit sendDayNumberToQml(1);
 }
 
+void Controller::setMenuField(QString field)
+{
+    if (field.toLower() == "личный кабинет")
+    {
+        emit sendClearAllToQml();
+        qDebug() << field;
+    }
+
+    if (field.toLower() == "настройки")
+    {
+        emit sendClearAllToQml();
+        qDebug() << field;
+    }
+
+    if (field.toLower() == "назад")
+    {
+        setWeekToQml(QDate::currentDate());
+        qDebug() << field;
+    }
+
+    if (field.toLower() == "календарь")
+    {
+        emit sendClearAllToQml();
+        qDebug() << field;
+    }
+
+    if (field.toLower() == "лаб. работы")
+    {
+        emit sendClearAllToQml();
+
+        for(int i = 0; i <= 30; i++){
+            QList<LabWork*> tmp = getLabWorksByDate(QDate::currentDate().addDays(i));
+
+            if(tmp.count() != 0){
+                QString dateLongName = QDate::longDayName(QDate::currentDate().addDays(i).dayOfWeek());
+                dateLongName[0] = dateLongName[0].toUpper();
+
+                emit sendOneLessonToQml("",
+                                        "date",
+                                        dateLongName + "\n" +
+                                        QDate::currentDate().addDays(i).toString("dd.MM.yy"),
+                                        "",
+                                        "");
+            }
+
+            for(auto oneLab : tmp){
+                emit sendOneLessonToQml(QString::number(oneLab->timeStart->hour()) + ":" +
+                                        (oneLab->timeStart->minute() < 10 ? "0" + QString::number(oneLab->timeStart->minute()) : QString::number(oneLab->timeStart->minute())) + "\n" +
+                                        QString::number(oneLab->timeEnd->hour()) + ":" +
+                                        (oneLab->timeEnd->minute() < 10 ? "0" + QString::number(oneLab->timeEnd->minute()) : QString::number(oneLab->timeEnd->minute())),
+                                        "(лаб)",
+                                        oneLab->lessonName,
+                                        oneLab->lessonCab,
+                                        oneLab->lessonLecturer);
+            }
+        }
+
+        emit finishSendDayToQml();
+        emit sendDateToQml("работы", "Лабораторные", "", "");
+        qDebug() << field;
+    }
+
+    if (field.toLower() == "обновить данные")
+    {
+        setWeekToQml(QDate::currentDate());
+        qDebug() << field;
+    }
+}
+
 void Controller::setWeekToQml(QDate date){
     emit sendClearAllToQml();
 
@@ -58,7 +127,7 @@ void Controller::setWeekToQml(QDate date){
     //emit sendWeekTypeToQml(!getCurrentWeekType(date));
 
     sendDaysListToQml(listDays);
-    emit sendDayNumberToQml(QDateTime::currentDateTime().date().dayOfWeek() == 7 ? QDateTime::currentDateTime().addDays(1).date().dayOfWeek() - 1 : QDateTime::currentDateTime().date().dayOfWeek() - 1);
+    emit sendDayNumberToQml(QDateTime::currentDateTime().date().dayOfWeek() == 7 ? 0 : QDateTime::currentDateTime().date().dayOfWeek() - 1);
 }
 
 QList<LabWork*> Controller::getLabWorksByDate(QDate date)
@@ -144,7 +213,7 @@ void Controller::sendDateListToQml(QList<QDate> dates){//добавить отп
         QString dateLongName = QDate::longDayName(date.dayOfWeek());
         dateLongName[0] = dateLongName[0].toUpper();
 
-        emit sendDateToQml(date.toString("dd.MM.yy"), dateLongName, QDate::shortDayName(date.dayOfWeek()).toUpper(), (bool)getCurrentWeekType(date));
+        emit sendDateToQml(date.toString("dd.MM.yy"), dateLongName, QDate::shortDayName(date.dayOfWeek()).toUpper(), getCurrentWeekType(date) ? "ЗН" : "ЧС");
     }
 }
 

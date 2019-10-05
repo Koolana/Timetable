@@ -13,6 +13,7 @@ Rectangle {
     property string currentWeek: ""
     property string currentDate: ""
     property int indexTodayDay: -1
+    property int curMenuState: 5
 
     property int animationDuration: 250
 
@@ -21,6 +22,7 @@ Rectangle {
     signal notEnd();
     signal changeDate(int num);
     signal menuClicked();
+    signal backToMainView();
 
     property string colorFont: "#ffffff";
     property string colorType0: "#2c3e50";
@@ -31,15 +33,12 @@ Rectangle {
 
     function clearAll(){
         dateList.clear();
+        dateShortList.clear();
     }
 
-    function changeHamburger(){
-        timeField.change();
-    }
-
-    function addDateToList(date, dateLongName, dateShortName, isCh){
+    function addDateToList(date, dateLongName, dateShortName, chZn){
         dateList.append({
-                            text: dateLongName + " (" + (isCh ? "ЧС" : "ЗН") + ")\n" + date,
+                            text: dateLongName + (chZn == "" ? ""  : " (" + chZn + ")") + "\n" + date,
                         });
 
         dateShortList.append({
@@ -106,26 +105,6 @@ Rectangle {
     }
 
     color: colorType0
-
-    HamburgerMenu {
-        id: timeField
-
-        animationDuration: animationDuration
-
-        anchors.leftMargin: 0
-
-//        text: currentTime
-
-        anchors.left: parent.left
-        anchors.verticalCenter: parent.verticalCenter
-
-        onButClicked: {
-            menuClicked();
-        }
-
-//        color: "#ffffff"
-    }
-
 
     Rectangle{
         id: bckButton
@@ -223,7 +202,7 @@ Rectangle {
         anchors.horizontalCenter: parent.horizontalCenter
         anchors.verticalCenter: parent.verticalCenter
 
-        anchors.left: timeField.right
+        anchors.left: parent.right
         height: parent.height
         //color: "#ffffff"
 
@@ -245,6 +224,8 @@ Rectangle {
             Shape {
                 width: 12
                 height: 10
+
+                visible: !(dateList.count <= 1)
 
                 anchors.rightMargin: 20
                 anchors.right: parent.right
@@ -279,6 +260,10 @@ Rectangle {
                 onClicked: {
                     //console.log("clc");
                     inViewCombo.state = inViewCombo.state == "off" ? "on" : "off"
+
+                    if (curMenuState != 5){
+                        backToMainView();
+                    }
                 }
             }
         }
@@ -286,6 +271,8 @@ Rectangle {
 
     ListView {
         id: inViewCombo
+
+        visible: !(dateList.count <= 1)
 
         currentIndex: indexTodayDay;
         orientation: ListView.Horizontal

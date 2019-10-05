@@ -9,8 +9,8 @@ Item{
 
     signal butClicked();
 
-    width: parent.height
-    height: parent.height
+    //width: parent.height
+    //height: parent.height
 
     Item {
         id: root

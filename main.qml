@@ -46,10 +46,12 @@ ApplicationWindow {
             mainView.currentIndex = num
             //header.reDrawTextFields();
             header.setIndex(num);
+
+            mainView.contentItem.highlightMoveDuration = 250
         }
 
         onSendDateToQml: {
-            header.addDateToList(date, dateLongName, dateShortName, isCh)
+            header.addDateToList(date, dateLongName, dateShortName, chZn)
         }
 
         onSendClearAllToQml: {
@@ -60,6 +62,7 @@ ApplicationWindow {
                 mainView.removeItem(mainView.itemAt(0));
             }
 
+            mainView.contentItem.highlightMoveDuration = 0
             header.indexTodayDay = 0
             mainView.currentIndex = 0
             //header.isCh = true
@@ -72,7 +75,7 @@ ApplicationWindow {
 
     SwipeView{
         id: mainView
-//        property int curIndexWitouthZero: 0
+        property int lastIndex: 0
 //        property int flag: 0
 
         anchors.topMargin: 10
@@ -99,7 +102,7 @@ ApplicationWindow {
             highlightRangeMode: ListView.StrictlyEnforceRange
             preferredHighlightBegin: 0
             preferredHighlightEnd: 0
-            highlightMoveDuration: 250
+            highlightMoveDuration: 0//250
 
             maximumFlickVelocity: 10 * (mainView.orientation === /*//10 - скорость анимации листания*/Qt.Horizontal ? width : height)
         }
@@ -115,7 +118,13 @@ ApplicationWindow {
 
 //            curIndexWitouthZero = mainView.currentIndex
 //            flag++;
+            if(mainView.itemAt(lastIndex))
+            {
+                mainView.itemAt(lastIndex).refreshMargin();
+            }
+
             header.setIndex(mainView.currentIndex);
+            lastIndex = currentIndex;
         }
 
         function addPage(page) {
@@ -134,17 +143,6 @@ ApplicationWindow {
         }
     }
 
-    MenuView{
-        id: menuView
-
-        onChangedState: {
-            header.changeHamburger();
-        }
-
-        headerHeight: header.height
-        windowWidth: parent.width
-    }
-
     HeaderView{
         id: header
 
@@ -157,6 +155,10 @@ ApplicationWindow {
         currentDay: "--"
         currentWeek: "--"
         currentDate: "--"
+
+        onBackToMainView: {
+            menuView.setStartMenuState();
+        }
 
         onNextDateEnd: {
             lrButtons.offNextDay();
@@ -176,10 +178,41 @@ ApplicationWindow {
             mainView.currentIndex = num;
             //console.log(num)
         }
+    }
 
-        onMenuClicked: {
+    MenuView{
+        id: menuView
+
+        onChangedState: {
+            hamburg.change();
+        }
+
+        headerHeight: header.height
+        windowWidth: parent.width
+
+        onChangedCurrentField: {
+            header.curMenuState = num
+        }
+    }
+
+    HamburgerMenu {
+        id: hamburg
+
+        width: header.height
+        height: header.height
+
+        anchors.leftMargin: 0
+
+//        text: currentTime
+
+        anchors.left: parent.left
+        anchors.top: parent.top
+
+        onButClicked: {
             menuView.changeState();
         }
+
+//        color: "#ffffff"
     }
 
     //    BackButton{
@@ -213,6 +246,7 @@ ApplicationWindow {
 
     LeftRightControlPanel{
         id: lrButtons
+        visible: !(mainView.count <= 1)
 
         anchors.right: parent.right
         anchors.bottom: parent.bottom

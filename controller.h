@@ -32,11 +32,12 @@ signals:
     void sendOneLessonToQml(QString time, QString type, QString name, QString cab, QString lecturer);
     void finishSendDayToQml();
     void sendDayNumberToQml(int num);
-    void sendDateToQml(QString date, QString dateLongName, QString dateShortName, bool isCh);
+    void sendDateToQml(QString date, QString dateLongName, QString dateShortName, QString chZn);
     void sendWeekTypeToQml(bool isCh);
     void sendClearAllToQml();
 
 public slots:
+    void setMenuField(QString field);
 
 private:
     QList<DayData*> allWeekData;

@@ -18,6 +18,7 @@ Rectangle {
     Text {
         id: timeField
         width: 50
+        visible: timeFieldText != ""
         renderType: Text.NativeRendering
         horizontalAlignment: Text.AlignHCenter
 
@@ -29,27 +30,30 @@ Rectangle {
         text: timeFieldText
     }
 
-    Text {
-        id: typeField
-        width: 50
-        renderType: Text.NativeRendering
-        horizontalAlignment: Text.AlignHCenter
+//    Text {
+//        id: typeField
+//        visible: typeField != "" && typeField == "date"
+//        width: 50
+//        renderType: Text.NativeRendering
+//        horizontalAlignment: Text.AlignHCenter
 
-        anchors.left: timeField.right
-        anchors.verticalCenter: parent.verticalCenter
-        anchors.leftMargin: 0
+//        anchors.left: timeField.right
+//        anchors.verticalCenter: parent.verticalCenter
+//        anchors.leftMargin: 0
 
-        color: colorFont
-        text: typeFieldText
-    }
+//        color: colorFont
+//        text: typeFieldText
+//    }
 
     Text {
         id: nameField
+        visible: nameField != ""
         //width: parent.width-220
         anchors.rightMargin: 10
         anchors.leftMargin: 10
-        anchors.left: typeField.right
+        anchors.left: timeField.right
         anchors.right: cabField.left
+
         renderType: Text.NativeRendering
         wrapMode: Text.WordWrap
         horizontalAlignment: Text.AlignHCenter
@@ -57,11 +61,12 @@ Rectangle {
         anchors.verticalCenter: parent.verticalCenter
 
         color: colorFont
-        text: nameFieldText
+        text: nameFieldText + (typeFieldText != "date" ? "\n" + typeFieldText : "")
     }
 
     Text {
         id: cabField
+        visible: cabField != ""
         width: 50
         renderType: Text.NativeRendering
         horizontalAlignment: Text.AlignHCenter
